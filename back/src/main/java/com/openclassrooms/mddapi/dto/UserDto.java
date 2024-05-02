@@ -10,4 +10,6 @@ public class UserDto {
     private String username;
     private String email;
     private List<String> topics;
+    private String updated_at;
+    private String created_at;
 }
