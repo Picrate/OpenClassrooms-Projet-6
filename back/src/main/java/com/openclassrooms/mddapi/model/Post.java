@@ -1,5 +1,7 @@
 package com.openclassrooms.mddapi.model;
 
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -8,25 +10,25 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-@Document(collection = "users")
-public class User {
+@Document(collection = "posts")
+public class Post {
 
     @Id
     private String id;
-    private String username;
-    private String password;
-    private String email;
-    private List<String> topics;
+    private String title;
+    private String content;
+    private User author;
+    private String topic;
+    private List<Comment> comments;
     @Field("created_at")
     private String createdAt;
-    @Field("updated_at")
-    private String updatedAt;
 
-    public User() {
-        this.topics = new ArrayList<>();
+    public Post() {
+        this.comments = new ArrayList<>();
     }
 }
