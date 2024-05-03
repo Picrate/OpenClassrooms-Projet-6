@@ -20,6 +20,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private boolean isAdmin;
     private List<String> topics;
     @Field("created_at")
     private String createdAt;
@@ -28,5 +29,14 @@ public class User {
 
     public User() {
         this.topics = new ArrayList<>();
+    }
+
+    public User(String username, String email, String password, boolean isAdmin) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        this.topics = new ArrayList<>();
+        this.createdAt = LocalDateTime.now().toString();
     }
 }
