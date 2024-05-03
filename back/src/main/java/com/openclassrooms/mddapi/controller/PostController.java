@@ -1,12 +1,11 @@
 package com.openclassrooms.mddapi.controller;
 
 import com.openclassrooms.mddapi.dto.PostDto;
+import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -27,5 +26,12 @@ public class PostController {
             return ResponseEntity.ok(dto);
         }
     }
+
+    @PostMapping()
+    public ResponseEntity<MessageResponse> createPost(@Valid @RequestBody PostDto postDto) {
+
+    }
+
+
 
 }

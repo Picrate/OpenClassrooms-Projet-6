@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/comments")
-@Slf4j
 public class CommentController {
 
     private final PostService postService;
@@ -38,7 +37,6 @@ public class CommentController {
     public ResponseEntity<MessageResponse> createComment(@RequestBody PostCommentDto postComment) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        log.info("Creating comment for " + currentPrincipalName);
         if (postComment == null || postComment.getPost_id() == null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Invalid post comment"));
         }else {

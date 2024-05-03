@@ -13,10 +13,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = DateMapper.class)
 public interface PostMapper {
 
-    @Mapping(target = "created_at", source = "createdAt", dateFormat = "yyyy-MM-dd'T'HH:mm:ss")
+    @Mapping(target = "created_at", source = "createdAt")
     public PostDto postToPostDto(Post post);
 
     @Mapping(target = "createdAt", source = "created_at")
@@ -26,8 +26,8 @@ public interface PostMapper {
 
     List<CommentDto> commentsToCommentDtos(List<Comment> comments);
 
-    @Mapping(target = "created_at", source = "createdAt", dateFormat = "yyyy-MM-dd'T'HH:mm:ss")
+    @Mapping(target = "created_at", source = "createdAt")
     CommentDto commentToCommentDto(Comment comment);
 
-    CommentDto commentDtoToComment(CommentDto commentDto);
+
 }

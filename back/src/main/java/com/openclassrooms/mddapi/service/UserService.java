@@ -1,13 +1,16 @@
 package com.openclassrooms.mddapi.service;
 
 import com.openclassrooms.mddapi.dto.SimpleUserDto;
+import com.openclassrooms.mddapi.dto.UpdatedUserDto;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.mapper.UserMapper;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -17,13 +20,15 @@ public class UserService {
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public UserDto getUserDtoById(String id) {
-        Optional<User> user = userRepository.findById(id);
+    public UserDto getUserDtoByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             return userMapper.userToDto(user.get());
         } else
@@ -39,6 +44,16 @@ public class UserService {
         }
     }
 
-
-
+    public void updateUser(UpdatedUserDto currentUser) {
+        Optional<User> user = this.userRepository.findByEmail(currentUser.getEmail());
+        if (user.isPresent()) {
+            User userToUpdate = user.get();
+            userToUpdate.setEmail(currentUser.getEmail());
+            userToUpdate.setUsername(currentUser.getUsername());
+            userToUpdate.setPassword(passwordEncoder.encode(currentUser.getPassword()));
+            userToUpdate.setUpdatedAt(LocalDateTime.now());
+            userToUpdate.setTopics(currentUser.getTopics());
+            userRepository.save(userToUpdate);
+        }
+    }
 }
