@@ -2,6 +2,7 @@ package com.openclassrooms.mddapi.mapper;
 
 import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.PostDto;
+import com.openclassrooms.mddapi.dto.SimplePostDto;
 import com.openclassrooms.mddapi.dto.SimpleUserDto;
 import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.Post;
@@ -22,7 +23,17 @@ public interface PostMapper {
     @Mapping(target = "createdAt", source = "created_at")
     public Post postDtoToPost(PostDto postDto);
 
+    public Post simplePostDtoToPost(SimplePostDto simplePostDto);
+
     SimpleUserDto userToSimpleUserDto(User user);
+
+    /*
+       Posts List Mapper
+     */
+    public List<PostDto> postsToPostDtos(List<Post> posts);
+    /*
+    Comments Mappers
+     */
 
     List<CommentDto> commentsToCommentDtos(List<Comment> comments);
 

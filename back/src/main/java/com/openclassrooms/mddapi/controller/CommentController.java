@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +37,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<MessageResponse> createComment(@RequestBody PostCommentDto postComment) {
+    public ResponseEntity<MessageResponse> createComment(@RequestBody PostCommentDto postComment, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         if (postComment == null || postComment.getPost_id() == null) {
@@ -45,8 +48,16 @@ public class CommentController {
                 return ResponseEntity.badRequest().body(new MessageResponse("Invalid post comment"));
             } else {
                 SimpleUserDto commentUser = this.userService.getSimpleUserDtoByEmail(currentPrincipalName);
-                postService.addCommentToPost(commentUser, postComment);
-                return ResponseEntity.ok(new MessageResponse("Comment created"));
+                String postId = postService.addCommentToPost(commentUser, postComment);
+                if (postId == null) {
+                    return ResponseEntity.badRequest().body(new MessageResponse("Invalid post comment"));
+                } else {
+                    URI locationOfRelatedPost = ucb
+                            .path("/api/posts/{id}")
+                            .buildAndExpand(postId)
+                            .toUri();
+                    return ResponseEntity.created(locationOfRelatedPost).build();
+                }
             }
         }
     }

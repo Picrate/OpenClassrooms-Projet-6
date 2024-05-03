@@ -10,6 +10,8 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
@@ -35,5 +37,4 @@ public class SpringFoxConfig {
                 new Contact("Patrice Allary", "www.orion.com", "patrice.allary@orion.com"),
                 "License of API", "API license URL", Collections.emptyList());
     }
-
 }

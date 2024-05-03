@@ -6,11 +6,13 @@ import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.mapper.UserMapper;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,6 +56,31 @@ public class UserService {
             userToUpdate.setUpdatedAt(LocalDateTime.now());
             userToUpdate.setTopics(currentUser.getTopics());
             userRepository.save(userToUpdate);
+        }
+    }
+
+    public List<String> getUserTopics(String email){
+        Optional<User> opt = this.userRepository.findByEmail(email);
+        if (opt.isPresent()) {
+            return opt.get().getTopics();
+        } else {
+            return null;
+        }
+    }
+
+    public Boolean updateTopics(String topic, String email) {
+        Optional<User> opt = this.userRepository.findByEmail(email);
+        if (opt.isPresent()) {
+            User user = opt.get();
+            if (!user.getTopics().contains(topic)) {
+                user.getTopics().add(topic);
+            } else {
+                user.getTopics().remove(topic);
+            }
+            this.userRepository.save(user);
+            return true;
+        } else {
+            return false;
         }
     }
 }
