@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +24,9 @@ public class User {
     private boolean isAdmin;
     private List<String> topics;
     @Field("created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
     @Field("updated_at")
-    private String updatedAt;
+    private LocalTime updatedAt;
 
     public User() {
         this.topics = new ArrayList<>();
@@ -37,6 +38,6 @@ public class User {
         this.password = password;
         this.isAdmin = isAdmin;
         this.topics = new ArrayList<>();
-        this.createdAt = LocalDateTime.now().toString();
+        this.createdAt = LocalDateTime.now();
     }
 }
