@@ -1,6 +1,5 @@
 package com.openclassrooms.mddapi.mapper;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

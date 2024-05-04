@@ -10,7 +10,6 @@ import com.openclassrooms.mddapi.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
