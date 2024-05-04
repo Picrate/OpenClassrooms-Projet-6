@@ -61,7 +61,7 @@ public class PostService {
             return postObj.getId();
         }
         else return null;
-        // TODO manage post does not exists exception
+
     }
 
     public String createNewPost(SimplePostDto postDto, SimpleUserDto author) {
@@ -71,14 +71,21 @@ public class PostService {
         return newPost.getId();
     }
 
+    // Return a list of post for a specific topic
     public List<PostDto> getAllPostsForTopic(String topic){
         return postMapper.postsToPostDtos(this.postRepository.findByTopicEqualsIgnoreCaseOrderByCreatedAtDesc(topic));
     }
 
+    // Return a list of post for user subscribed topics
     public List<PostDto> getAllPostsForTopics(List<String> topics){
-        Query query = new Query();
-        Criteria criteria = Criteria.where("topic").in(topics);
-        query.addCriteria(criteria);
+        Criteria orCriteria = new Criteria();
+        List<Criteria> topicsCriterias = new ArrayList<>();
+        for(String topic : topics){
+            Criteria criteria = Criteria.where("topic").is(topic);
+            topicsCriterias.add(criteria);
+        }
+        orCriteria.orOperator(topicsCriterias);
+        Query query = new Query(orCriteria);
         return postMapper.postsToPostDtos(mongoTemplate.find(query, Post.class));
     }
 
