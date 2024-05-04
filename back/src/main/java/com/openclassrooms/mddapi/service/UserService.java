@@ -6,11 +6,11 @@ import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.mapper.UserMapper;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +19,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    UserMapper userMapper;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserDto getUserDtoByEmail(String email) {
@@ -63,7 +63,7 @@ public class UserService {
         if (opt.isPresent()) {
             return opt.get().getTopics();
         } else {
-            return null;
+            return new ArrayList<>();
         }
     }
 

@@ -22,6 +22,8 @@ import java.net.URI;
 @RequestMapping("/api/comments")
 public class CommentController {
 
+    private final String  INVALID_COMMENT = "Invalid post comment";
+
     private final PostService postService;
     private final UserService userService;
 
@@ -35,16 +37,16 @@ public class CommentController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         if (postComment == null || postComment.getPost_id() == null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Invalid post comment"));
+            return ResponseEntity.badRequest().body(new MessageResponse(INVALID_COMMENT);
         }else {
             Post postToAddComment = postService.getPostById(postComment.getPost_id());
             if (postToAddComment == null) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Invalid post comment"));
+                return ResponseEntity.badRequest().body(new MessageResponse(INVALID_COMMENT));
             } else {
                 SimpleUserDto commentUser = this.userService.getSimpleUserDtoByEmail(currentPrincipalName);
                 String postId = postService.addCommentToPost(commentUser, postComment);
                 if (postId == null) {
-                    return ResponseEntity.badRequest().body(new MessageResponse("Invalid post comment"));
+                    return ResponseEntity.badRequest().body(new MessageResponse(INVALID_COMMENT));
                 } else {
                     URI locationOfRelatedPost = ucb
                             .path("/api/posts/{id}")
