@@ -78,15 +78,19 @@ public class PostService {
 
     // Return a list of post for user subscribed topics
     public List<PostDto> getAllPostsForTopics(List<String> topics){
-        Criteria orCriteria = new Criteria();
-        List<Criteria> topicsCriterias = new ArrayList<>();
-        for(String topic : topics){
-            Criteria criteria = Criteria.where("topic").is(topic);
-            topicsCriterias.add(criteria);
+        if(topics.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            Criteria orCriteria = new Criteria();
+            List<Criteria> topicsCriterias = new ArrayList<>();
+            for(String topic : topics){
+                Criteria criteria = Criteria.where("topic").is(topic);
+                topicsCriterias.add(criteria);
+            }
+            orCriteria.orOperator(topicsCriterias);
+            Query query = new Query(orCriteria);
+            return postMapper.postsToPostDtos(mongoTemplate.find(query, Post.class));
         }
-        orCriteria.orOperator(topicsCriterias);
-        Query query = new Query(orCriteria);
-        return postMapper.postsToPostDtos(mongoTemplate.find(query, Post.class));
     }
 
 

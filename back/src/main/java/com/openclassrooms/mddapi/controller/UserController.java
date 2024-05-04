@@ -7,16 +7,20 @@ import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -51,7 +55,7 @@ public class UserController {
             this.userService.updateUser(updatedUserDto);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.badRequest().body(new MessageResponse("Not allowed to update profile."));
+            return ResponseEntity.unprocessableEntity().body(new MessageResponse("Email already used."));
         }
     }
 
@@ -92,4 +96,16 @@ public class UserController {
         return authentication.getName();
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 }
