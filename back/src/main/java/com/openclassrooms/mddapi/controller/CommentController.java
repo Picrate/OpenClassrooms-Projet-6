@@ -3,13 +3,10 @@ package com.openclassrooms.mddapi.controller;
 
 import com.openclassrooms.mddapi.dto.PostCommentDto;
 import com.openclassrooms.mddapi.dto.SimpleUserDto;
-import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.Post;
-import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,12 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/comments")
