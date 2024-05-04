@@ -1,6 +1,6 @@
 package com.openclassrooms.mddapi.payload.request;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 public class LoginRequest {
 
