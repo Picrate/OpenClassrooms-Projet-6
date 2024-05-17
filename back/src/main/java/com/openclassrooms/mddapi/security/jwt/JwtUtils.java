@@ -2,7 +2,6 @@ package com.openclassrooms.mddapi.security.jwt;
 
 import com.openclassrooms.mddapi.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,6 @@ public class JwtUtils {
 
     public ResponseCookie getCleanJwtCookie(){
         return ResponseCookie.from(jwtCookie, null).path("/api").build();
-
     }
 
     // jwtSecret must be 32 bytes long and encoded in BASE64
@@ -49,24 +47,23 @@ public class JwtUtils {
     }
 
     public String generateTokenFromUsername(String username){
-        String result = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+        return Jwts.builder()
+                .issuer("Orion")
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
-        log.info(result);
-        return result;
     }
 
     public String getUserNameFromJwtToken(String token) {
-        JwtParser parser = Jwts.parserBuilder().setSigningKey(key()).build();
+        JwtParser parser = Jwts.parser().setSigningKey(key()).build();
         return parser.parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+            Jwts.parser().setSigningKey(key()).build().parse(authToken);
             return true;
         } catch (MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());
@@ -77,7 +74,6 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
-
         return false;
     }
 
