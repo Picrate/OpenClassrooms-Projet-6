@@ -7,6 +7,8 @@ import {SignInRequest} from "../../interfaces/sign-in-request";
 import {SessionInformation} from "../../../../interfaces/session-information";
 import {SignUpRequest} from "../../interfaces/sign-up-request";
 
+const PASSWORD_VALIDATOR_PATTERN = '/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\S*([^\\w\\s]|[_]))\\S{8,}$/g';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -36,7 +38,7 @@ export class SignupComponent {
       [
         Validators.required,
         Validators.min(8),
-        Validators.pattern('/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\S*([^\\w\\s]|[_]))\\S{8,}$/g')
+        Validators.pattern(PASSWORD_VALIDATOR_PATTERN)
       ]
     ]
   })

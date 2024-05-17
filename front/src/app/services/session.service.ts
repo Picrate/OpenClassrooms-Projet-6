@@ -37,8 +37,8 @@ export class SessionService {
     this.isAuthenticatedSubject.next(this.isAuthenticated);
   }
 
-  public getCurrentUserInformations(): User | undefined{
-    return this.sessionInformation?.user;
+  public getCurrentUserInformations(): SessionInformation | undefined{
+    return this.sessionInformation;
 }
 
 }
