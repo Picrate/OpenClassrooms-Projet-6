@@ -9,6 +9,7 @@ import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin(origins = "http://localhost:4002", maxAge = 3600, allowCredentials="true")
 public class PostController {
 
     private final PostService postService;
@@ -35,6 +37,7 @@ public class PostController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> createPost(@Valid @RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -52,6 +55,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<PostDto> getPostById(@PathVariable String id) {
         PostDto dto = postService.getPostDtoById(id);
         if(dto == null) {
@@ -73,6 +77,7 @@ public class PostController {
     }
 
     @GetMapping("/topics")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TopicDto>> getAllTopics() {
         List<TopicDto> topics = this.postService.getAllTopics();
         if(topics == null) {

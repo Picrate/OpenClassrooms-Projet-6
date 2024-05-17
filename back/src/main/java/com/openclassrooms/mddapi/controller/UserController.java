@@ -7,6 +7,7 @@ import com.openclassrooms.mddapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:4002", maxAge = 3600, allowCredentials="true")
 public class UserController {
 
     private final UserService userService;
@@ -34,6 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/get")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<SimpleUserDto> getUserByEmail(@RequestParam @Email String email){
         if(this.userService.existsByEmail(email)){
             return ResponseEntity.ok(this.userService.getSimpleUserDtoByEmail(email));
@@ -43,6 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserDto> getUserProfile(){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
         UserDto dto = userService.getUserDtoByEmail(currentPrincipalName);
@@ -53,6 +57,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> updateMyProfile(@Valid @RequestBody UpdatedUserDto updatedUserDto){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
         UserDto currentUser = userService.getUserDtoByEmail(currentPrincipalName);
@@ -67,6 +72,7 @@ public class UserController {
     }
 
     @GetMapping("/topics")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TopicDto>> getUserTopics(){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
         List<TopicDto> topics = userService.getUserTopics(currentPrincipalName);
@@ -78,6 +84,7 @@ public class UserController {
     }
 
     @PutMapping("/topics")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> updateUserTopics(@Valid @RequestBody TopicDto topic){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
         if(topic == null){
@@ -91,6 +98,7 @@ public class UserController {
     }
 
     @GetMapping("/feed")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<PostDto>> getUserFeed(){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
         List<PostDto> posts = this.postService.getAllPostsForTopics(this.userService.getUserTopics(currentPrincipalName));
