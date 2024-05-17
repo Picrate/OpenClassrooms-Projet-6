@@ -1,0 +1,31 @@
+<div class="my-profile">
+    <div class="user_infos">
+        <h2>Profil Utilisateur</h2>
+        <form action="">
+          <mat-form-field appearance="outline">
+            <input matNativeControl type="text" placeholder="Username">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <input matNativeControl type="email" placeholder="email@email.fr">
+          </mat-form-field>
+          <button mat-flat-button color="primary" type="submit">Sauvegarder</button>
+          <a href="#" (click)="logOut()">Se déconnecter</a>
+        </form>
+    </div>
+  <div class="subscriptions">
+    <h3>Abonnements</h3>
+    <div class="topics" *ngIf="user.topics.length > 0">
+      <mat-card *ngFor="let topic of user.topics">
+        <mat-card-header>
+          <mat-card-title>{{topic}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          Description
+        </mat-card-content>
+        <mat-card-footer>
+          <button mat-flat-button color="primary" (click)="unsubscribe(topic)">Se désabonner</button>
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  </div>
+</div>

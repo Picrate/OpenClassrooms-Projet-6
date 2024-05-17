@@ -1,0 +1,17 @@
+<form id="new-post-form" [formGroup]="topicForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput type="text" [matAutocomplete]="auto" formControlName="topic">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let topic of  filteredTopics | async" [value]="topic.title">
+      {{topic.title}}
+    </mat-option>
+  </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput id="title" type="text" formControlName="title" placeholder="Titre de l'article" >
+  </mat-form-field>
+  <mat-form-field>
+  <textarea matInput id="content" formControlName="content" placeholder="Contenu de l'article"></textarea>
+  </mat-form-field>
+  <button mat-flat-button color="primary" type="submit">Créer</button>
+</form>
