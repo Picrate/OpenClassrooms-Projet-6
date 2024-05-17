@@ -1,9 +1,6 @@
 package com.openclassrooms.mddapi.controller;
 
-import com.openclassrooms.mddapi.dto.PostDto;
-import com.openclassrooms.mddapi.dto.TopicDto;
-import com.openclassrooms.mddapi.dto.UpdatedUserDto;
-import com.openclassrooms.mddapi.dto.UserDto;
+import com.openclassrooms.mddapi.dto.*;
 import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +31,15 @@ public class UserController {
     public UserController(UserService userService, PostService postService) {
         this.userService = userService;
         this.postService = postService;
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<SimpleUserDto> getUserByEmail(@RequestParam @Email String email){
+        if(this.userService.existsByEmail(email)){
+            return ResponseEntity.ok(this.userService.getSimpleUserDtoByEmail(email));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/me")
@@ -60,9 +67,9 @@ public class UserController {
     }
 
     @GetMapping("/topics")
-    public ResponseEntity<List<String>> getUserTopics(){
+    public ResponseEntity<List<TopicDto>> getUserTopics(){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
-        List<String> topics = userService.getUserTopics(currentPrincipalName);
+        List<TopicDto> topics = userService.getUserTopics(currentPrincipalName);
         if(topics == null){
             return ResponseEntity.notFound().build();
         } else {
@@ -76,7 +83,7 @@ public class UserController {
         if(topic == null){
             return ResponseEntity.badRequest().body(new MessageResponse("Topic can not be empty."));
         } else {
-            if(this.userService.updateTopics(topic.getTopic(), currentPrincipalName))
+            if(Boolean.TRUE.equals(this.userService.updateTopics(topic, currentPrincipalName)))
                 return ResponseEntity.noContent().build();
             else
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new MessageResponse("Error in updating user topics."));

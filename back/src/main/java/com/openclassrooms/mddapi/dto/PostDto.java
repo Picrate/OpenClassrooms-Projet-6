@@ -12,6 +12,6 @@ public class PostDto extends SimplePostDto{
     @NotBlank
     private SimpleUserDto author;
     @NotBlank
-    private String created_at;
+    private String createdAt;
     private List<CommentDto> comments;
 }

@@ -23,7 +23,7 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private SimpleUserDto author;
+    private Author author;
     private String topic;
     private List<Comment> comments;
     @Field("created_at")

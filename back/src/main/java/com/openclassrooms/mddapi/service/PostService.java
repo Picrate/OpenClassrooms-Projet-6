@@ -1,12 +1,11 @@
 package com.openclassrooms.mddapi.service;
 
-import com.openclassrooms.mddapi.dto.PostCommentDto;
-import com.openclassrooms.mddapi.dto.PostDto;
-import com.openclassrooms.mddapi.dto.SimplePostDto;
-import com.openclassrooms.mddapi.dto.SimpleUserDto;
+import com.openclassrooms.mddapi.dto.*;
 import com.openclassrooms.mddapi.mapper.PostMapper;
+import com.openclassrooms.mddapi.mapper.TopicMapper;
 import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.Post;
+import com.openclassrooms.mddapi.model.Topic;
 import com.openclassrooms.mddapi.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,6 +24,8 @@ public class PostService {
 
     @Autowired
     PostMapper postMapper;
+    @Autowired
+    TopicMapper topicMapper;
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -55,7 +56,7 @@ public class PostService {
         Optional<Post> post = postRepository.findById(postId);
         if(post.isPresent()) {
             Post postObj = post.get();
-            Comment comment = new Comment(user, postCommentDto.getComment());
+            Comment comment = new Comment(postMapper.simpleUserDtoToAuthor(user), postCommentDto.getComment());
             postObj.addComment(comment);
             postRepository.save(postObj);
             return postObj.getId();
@@ -66,7 +67,7 @@ public class PostService {
 
     public String createNewPost(SimplePostDto postDto, SimpleUserDto author) {
         Post newPost = postMapper.simplePostDtoToPost(postDto);
-        newPost.setAuthor(author);
+        newPost.setAuthor(postMapper.simpleUserDtoToAuthor(author));
         this.postRepository.save(newPost);
         return newPost.getId();
     }
@@ -77,13 +78,13 @@ public class PostService {
     }
 
     // Return a list of post for user subscribed topics
-    public List<PostDto> getAllPostsForTopics(List<String> topics){
+    public List<PostDto> getAllPostsForTopics(List<TopicDto> topics){
         if(topics.isEmpty()) {
             return new ArrayList<>();
         } else {
             Criteria orCriteria = new Criteria();
             List<Criteria> topicsCriterias = new ArrayList<>();
-            for(String topic : topics){
+            for(TopicDto topic : topics){
                 Criteria criteria = Criteria.where("topic").is(topic);
                 topicsCriterias.add(criteria);
             }
@@ -91,6 +92,14 @@ public class PostService {
             Query query = new Query(orCriteria);
             return postMapper.postsToPostDtos(mongoTemplate.find(query, Post.class));
         }
+    }
+
+    public List<TopicDto> getAllTopics(){
+        List<Topic> topics = this.mongoTemplate.query(Post.class)
+                .distinct("topic")
+                .as(Topic.class)
+                .all();
+        return topicMapper.topicListToTopicDtoList(topics);
     }
 
 

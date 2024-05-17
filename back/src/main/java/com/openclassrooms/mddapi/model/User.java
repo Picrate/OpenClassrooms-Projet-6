@@ -21,7 +21,7 @@ public class User {
     private String password;
     private String email;
     private boolean isAdmin;
-    private List<String> topics;
+    private List<Topic> topics;
     @Field("created_at")
     private LocalDateTime createdAt;
     @Field("updated_at")
