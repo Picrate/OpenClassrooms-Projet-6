@@ -1,0 +1,24 @@
+<div class="my-feed">
+  <div class="feed-header">
+    <button mat-flat-button color="primary" (click)="addArticle()">Créer un article</button>
+    <button mat-button [matMenuTriggerFor]="sortmenu">
+      <span>Trier Par</span>
+      <mat-icon fontIcon="arrow_downward"></mat-icon>
+    </button>
+    <mat-menu #sortmenu="matMenu">
+      <button mat-menu-item>Date</button>
+    </mat-menu>
+  </div>
+  <div class="posts">
+    <mat-card  *ngFor="let post of (myFeedList$ | async)">
+      <mat-card-header>
+        <mat-card-title><a [routerLink]="['/posts',post.id]">{{post.title}}</a></mat-card-title>
+        <mat-card-subtitle><p>Date: {{post.created_at| date:"longDate"}}</p><p>Auteur: {{post.author.username}}</p></mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{post.content}}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

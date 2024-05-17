@@ -6,8 +6,11 @@ import com.openclassrooms.mddapi.dto.UpdatedUserDto;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.mapper.TopicMapper;
 import com.openclassrooms.mddapi.mapper.UserMapper;
+import com.openclassrooms.mddapi.model.ERole;
+import com.openclassrooms.mddapi.model.Role;
 import com.openclassrooms.mddapi.model.Topic;
 import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.repository.RoleRepository;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,12 +27,14 @@ public class UserService {
     private final UserMapper userMapper;
     private final TopicMapper topicMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, TopicMapper topicMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, TopicMapper topicMapper, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.topicMapper = topicMapper;
+        this.roleRepository = roleRepository;
     }
 
     public UserDto getUserDtoByEmail(String email) {
@@ -90,6 +95,14 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return this.userRepository.existsByEmail(email);
+    }
+
+    public boolean existsByUsername(String username) {
+        return this.userRepository.existsByUsername(username);
+    }
+
+    public Optional<Role> getRole(ERole role){
+        return roleRepository.findByName(role);
     }
 
     public void save(User user) {

@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  .logo img{
+    height: 15vh;
+  }
+  mat-nav-list.list-horizontal {
+    display: flex;
+    flex-direction: row;
+  }
+}

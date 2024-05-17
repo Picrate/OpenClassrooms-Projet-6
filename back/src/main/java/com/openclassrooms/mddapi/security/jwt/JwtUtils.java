@@ -2,21 +2,22 @@ package com.openclassrooms.mddapi.security.jwt;
 
 import com.openclassrooms.mddapi.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
-import org.springframework.boot.web.server.Cookie;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
-import java.time.Instant;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Key;
 import java.util.Date;
 
-@Component
 @Slf4j
+@Component
 public class JwtUtils {
-
-    private static final String COOKIE_NAME = "token";
 
     @Value("${oc.app.jwtSecret}")
     private String jwtSecret;
@@ -24,34 +25,46 @@ public class JwtUtils {
     @Value("${oc.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    static Cookie generateCookie(Authentication authentication) {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        Instant now = Instant.now();
-        String token = JWT.
+    @Value("${oc.app.jwtCookieName}")
+    private String jwtCookie;
+
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
+        String jwt = generateTokenFromUsername(userPrincipal.getEmail());
+        return ResponseCookie
+                .from(jwtCookie, jwt)
+                .path("/api").maxAge(24*60*60)
+                .httpOnly(true)
+                .build();
     }
 
-    public String generateJwtToken(Authentication authentication) {
+    public ResponseCookie getCleanJwtCookie(){
+        return ResponseCookie.from(jwtCookie, null).path("/api").build();
+    }
 
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    // jwtSecret must be 32 bytes long and encoded in BASE64
+    private Key key() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+    }
 
+    public String generateTokenFromUsername(String username){
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .issuer("Orion")
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        JwtParser parser = Jwts.parser().setSigningKey(key()).build();
+        return parser.parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(key()).build().parse(authToken);
             return true;
-        } catch (SignatureException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
@@ -61,7 +74,15 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
-
         return false;
+    }
+
+    public String getJwtFromCookies(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+        if (cookie != null) {
+            return cookie.getValue();
+        }  else {
+            return null;
+        }
     }
 }

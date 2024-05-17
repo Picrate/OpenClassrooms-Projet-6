@@ -1,0 +1,27 @@
+<div id="signup">
+  <div class="logo">
+    <img src="assets/logo_p6.png">
+  </div>
+  <form class="signup-form" [formGroup]="signUpForm" (ngSubmit)="signup()">
+    <mat-form-field>
+      <mat-label>
+        Username:
+      </mat-label>
+      <input matNativeControl type="text" formControlName="username">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>
+        Email:
+      </mat-label>
+      <input matNativeControl type="email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>
+        Mot de passe:
+      </mat-label>
+      <input matNativeControl type="password" formControlName="password">
+    </mat-form-field>
+    <button mat-flat-button color="primary" type="submit">S'inscrire</button>
+  </form>
+</div>
+

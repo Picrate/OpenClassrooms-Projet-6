@@ -1,0 +1,25 @@
+<div class="post">
+
+  <div class="post-header">
+    <div class="post-title"><button mat-button (click)="goBack()"><mat-icon fontIcon="arrow_back"></mat-icon></button><h2>{{post.title}}</h2></div>
+    <div class="post-infos"><p>Date: {{post.created_at | date: "longDate"}}</p><p>Auteur: {{post.author.username}}</p><p>Thème: {{post.topic}}</p></div>
+  </div>
+  <div class="post-content">
+    <p>{{post.content}}</p>
+    <div class="comments">
+      <p>Commentaires</p>
+      <div class="comment" *ngFor="let comment of post.comments">
+        <p>{{comment.author}}</p>
+        <p>{{comment.content}}</p>
+      </div>
+    </div>
+    <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="postComment()">
+      <mat-form-field>
+        <textarea matNativeControl formControlName="comment" placeholder="Ecrivez votre commentaire ici"></textarea>
+      </mat-form-field>
+      <button type="submit">
+        <mat-icon fontIcon="send"></mat-icon>
+      </button>
+    </form>
+  </div>
+</div>
