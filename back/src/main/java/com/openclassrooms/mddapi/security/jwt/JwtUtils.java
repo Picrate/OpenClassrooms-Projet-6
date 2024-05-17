@@ -4,20 +4,31 @@ import com.openclassrooms.mddapi.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Component
 @Slf4j
 public class JwtUtils {
 
+    private static final String COOKIE_NAME = "token";
+
     @Value("${oc.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${oc.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
+    static Cookie generateCookie(Authentication authentication) {
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        Instant now = Instant.now();
+        String token = JWT.
+    }
 
     public String generateJwtToken(Authentication authentication) {
 

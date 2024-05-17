@@ -1,9 +1,12 @@
 package com.openclassrooms.mddapi.service;
 
 import com.openclassrooms.mddapi.dto.SimpleUserDto;
+import com.openclassrooms.mddapi.dto.TopicDto;
 import com.openclassrooms.mddapi.dto.UpdatedUserDto;
 import com.openclassrooms.mddapi.dto.UserDto;
+import com.openclassrooms.mddapi.mapper.TopicMapper;
 import com.openclassrooms.mddapi.mapper.UserMapper;
+import com.openclassrooms.mddapi.model.Topic;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,14 +21,15 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final UserMapper userMapper;
+    private final TopicMapper topicMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, TopicMapper topicMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.topicMapper = topicMapper;
     }
 
     public UserDto getUserDtoByEmail(String email) {
@@ -53,33 +57,42 @@ public class UserService {
             userToUpdate.setUsername(currentUser.getUsername());
             userToUpdate.setPassword(passwordEncoder.encode(currentUser.getPassword()));
             userToUpdate.setUpdatedAt(LocalDateTime.now());
-            userToUpdate.setTopics(currentUser.getTopics());
+            userToUpdate.setTopics(topicMapper.topicDtoToTopicList(currentUser.getTopics()));
             userRepository.save(userToUpdate);
         }
     }
 
-    public List<String> getUserTopics(String email){
+    public List<TopicDto> getUserTopics(String email){
         Optional<User> opt = this.userRepository.findByEmail(email);
         if (opt.isPresent()) {
-            return opt.get().getTopics();
+            return topicMapper.topicListToTopicDtoList(opt.get().getTopics());
         } else {
             return new ArrayList<>();
         }
     }
 
-    public Boolean updateTopics(String topic, String email) {
+    public Boolean updateTopics(TopicDto topicDto, String email) {
         Optional<User> opt = this.userRepository.findByEmail(email);
+        Topic topicToUpdate = topicMapper.topicDtoToTopic(topicDto);
         if (opt.isPresent()) {
             User user = opt.get();
-            if (!user.getTopics().contains(topic)) {
-                user.getTopics().add(topic);
+            if (!user.getTopics().contains(topicToUpdate)) {
+                user.getTopics().add(topicToUpdate);
             } else {
-                user.getTopics().remove(topic);
+                user.getTopics().remove(topicToUpdate);
             }
             this.userRepository.save(user);
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean existsByEmail(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public void save(User user) {
+        this.userRepository.save(user);
     }
 }

@@ -3,6 +3,7 @@ package com.openclassrooms.mddapi.controller;
 import com.openclassrooms.mddapi.dto.PostDto;
 import com.openclassrooms.mddapi.dto.SimplePostDto;
 import com.openclassrooms.mddapi.dto.SimpleUserDto;
+import com.openclassrooms.mddapi.dto.TopicDto;
 import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
@@ -33,16 +34,6 @@ public class PostController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable String id) {
-        PostDto dto = postService.getPostDtoById(id);
-        if(dto == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(dto);
-        }
-    }
-
     @PostMapping()
     public ResponseEntity<MessageResponse> createPost(@Valid @RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -60,6 +51,16 @@ public class PostController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable String id) {
+        PostDto dto = postService.getPostDtoById(id);
+        if(dto == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(dto);
+        }
+    }
+
     @GetMapping("/topic")
     public ResponseEntity<List<PostDto>> getPostsByTopic(@RequestParam String topic) {
         if(topic == null || topic.isEmpty()) {
@@ -68,6 +69,16 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else {
             return ResponseEntity.ok(this.postService.getAllPostsForTopic(topic));
+        }
+    }
+
+    @GetMapping("/topics")
+    public ResponseEntity<List<TopicDto>> getAllTopics() {
+        List<TopicDto> topics = this.postService.getAllTopics();
+        if(topics == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok(topics);
         }
     }
 

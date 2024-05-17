@@ -7,5 +7,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class TopicDto {
     @NotBlank
-    private String topic;
+    private String title;
+    @NotBlank
+    private String description;
 }

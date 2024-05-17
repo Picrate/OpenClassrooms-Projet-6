@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Comment {
-    private SimpleUserDto author;
+    private Author author;
     private String content;
     @Field("created_at")
     private LocalDateTime createdAt;
 
-    public Comment(SimpleUserDto author, String content) {
+    public Comment(Author author, String content) {
         this.author = author;
         this.content = content;
         this.createdAt = LocalDateTime.now();
