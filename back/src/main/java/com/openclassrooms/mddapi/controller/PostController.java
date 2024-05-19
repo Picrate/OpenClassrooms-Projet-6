@@ -66,6 +66,7 @@ public class PostController {
     }
 
     @GetMapping("/topic")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<PostDto>> getPostsByTopic(@RequestParam String topic) {
         if(topic == null || topic.isEmpty()) {
             return ResponseEntity.badRequest().build();

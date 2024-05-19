@@ -11,5 +11,5 @@ public class SimplePostDto {
     @NotBlank
     private String content;
     @NotBlank
-    private String topic;
+    private TopicDto topic;
 }

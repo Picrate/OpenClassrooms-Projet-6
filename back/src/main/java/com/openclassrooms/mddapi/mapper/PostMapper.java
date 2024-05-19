@@ -1,13 +1,7 @@
 package com.openclassrooms.mddapi.mapper;
 
-import com.openclassrooms.mddapi.dto.CommentDto;
-import com.openclassrooms.mddapi.dto.PostDto;
-import com.openclassrooms.mddapi.dto.SimplePostDto;
-import com.openclassrooms.mddapi.dto.SimpleUserDto;
-import com.openclassrooms.mddapi.model.Author;
-import com.openclassrooms.mddapi.model.Comment;
-import com.openclassrooms.mddapi.model.Post;
-import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.dto.*;
+import com.openclassrooms.mddapi.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -32,5 +26,13 @@ public interface PostMapper {
      */
     SimpleUserDto authorToSimpleUserDto(Author author);
     Author simpleUserDtoToAuthor(SimpleUserDto simpleUserDto);
+    /*
+    Topic Mapper
+     */
+    TopicDto topicToTopicDto(Topic topic);
+    Topic topicDtoToTopic(TopicDto topicDto);
+
+
+
 
 }
