@@ -7,6 +7,8 @@ import {PostsModule} from "../posts/posts.module";
 import {ButtonModule} from "primeng/button";
 import {SplitButtonModule} from "primeng/splitbutton";
 import {CardModule} from "primeng/card";
+import {InputTextModule} from "primeng/inputtext";
+import {SplitterModule} from "primeng/splitter";
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import {CardModule} from "primeng/card";
     ButtonModule,
     SplitButtonModule,
     CardModule,
+    InputTextModule,
+    SplitterModule,
   ]
 })
 export class UsersModule { }

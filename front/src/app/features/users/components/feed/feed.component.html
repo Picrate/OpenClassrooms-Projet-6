@@ -4,9 +4,7 @@
     <button pButton label="Trier Par" icon="pi pi-arrow-down" iconPos="right" class="p-button-text p-button-secondary"></button>
   </div>
   <div class="posts">
-    <p-card *ngFor="let post of myFeedList$ | async">
-
-    </p-card>
+    <app-post-list [postList]="myFeedList$"></app-post-list>
   </div>
 </div>
 

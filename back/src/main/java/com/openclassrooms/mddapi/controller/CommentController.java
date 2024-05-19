@@ -48,7 +48,7 @@ public class CommentController {
             if (postToAddComment == null) {
                 return ResponseEntity.badRequest().body(new MessageResponse(INVALID_COMMENT));
             } else {
-                SimpleUserDto commentUser = this.userService.getSimpleUserDtoByEmail(currentPrincipalName);
+                SimpleUserDto commentUser = this.userService.getSimpleUserDtoByEmailOrUsername(currentPrincipalName);
                 String postId = postService.addCommentToPost(commentUser, postComment);
                 if (postId == null) {
                     return ResponseEntity.badRequest().body(new MessageResponse(INVALID_COMMENT));

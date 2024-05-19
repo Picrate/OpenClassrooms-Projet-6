@@ -31,8 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
-@CrossOrigin(origins = "*", maxAge = 3600)
-//@CrossOrigin(origins = "http://localhost:4002", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4002", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -56,9 +55,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserInfoResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

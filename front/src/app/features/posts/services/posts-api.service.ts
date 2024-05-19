@@ -19,7 +19,7 @@ export class PostsApiService {
     return this.httpClient.get<Post>(`${this.pathService}/${postId}`);
   }
 
-  public getByTopic(topic: string): Observable<Array<Post>> {
+  public getPosts(topic: string): Observable<Array<Post>> {
     const parameter = topic.trim();
     const options =
       parameter

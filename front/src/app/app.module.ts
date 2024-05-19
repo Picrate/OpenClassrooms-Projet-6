@@ -10,6 +10,7 @@ import {NotFoundComponent} from "./pages/not-found/not-found.component";
 import {NgOptimizedImage} from "@angular/common";
 import {ButtonModule} from "primeng/button";
 import {ToolbarModule} from "primeng/toolbar";
+import {DividerModule} from "primeng/divider";
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HeaderComponent, NotFoundComponent],
@@ -20,6 +21,7 @@ import {ToolbarModule} from "primeng/toolbar";
     NgOptimizedImage,
     ButtonModule,
     ToolbarModule,
+    DividerModule,
   ],
   providers: [
     httpInterceptorProviders,

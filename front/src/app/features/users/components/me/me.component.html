@@ -1,21 +1,20 @@
-<div class="my-profile">
-    <div class="user_infos">
+<div class="flex flex-column align-items-center m-5">
+    <div class="flex flex-column">
         <h2>Profil Utilisateur</h2>
-        <form action="">
-          <fieldset>
-            <input pInputText type="text" placeholder="Username">
-          </fieldset>
-          <fieldset>
-            <input pInputText type="email" placeholder="email@email.fr">
-          </fieldset>
-          <button pButton type="submit">Sauvegarder</button>
-          <a href="#" (click)="logOut()">Se déconnecter</a>
+        <form class="flex flex-column">
+            <input pInputText type="text" placeholder="Username" class="p-input-filled m-2">
+            <input pInputText type="email" placeholder="email@email.fr" class="p-input-filled m-2">
+            <button pButton type="button" class="p-button-raised m-2" (click)="updateProfile()">Sauvegarder</button>
+            <button pButton type="button" class="p-button-link m-2" (click)="logOut()">Se déconnecter</button>
         </form>
     </div>
-  <div class="subscriptions">
+  <div><p-splitter></p-splitter></div>
+  <div class="flex flex-column align-items-center">
     <h3>Abonnements</h3>
-    <div class="topics" *ngIf="user.topics.length > 0">
-      Topic Card
+    <div class="grid m-5" *ngIf="user.topics.length > 0">
+      <div class="col-6" *ngFor="let topic of user.topics">
+        <app-topic-card [topic]="topic"></app-topic-card>
+      </div>
     </div>
   </div>
 </div>

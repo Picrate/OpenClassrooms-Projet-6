@@ -28,14 +28,16 @@ export class MeComponent implements OnInit {
     })
   }
 
-  unsubscribe(param: string) {
-
-  }
-
   logOut() {
     this.authService.logout().subscribe(() => {
       this.sessionStorageService.logout();
       this.router.navigate(['/home']);
     });
+  }
+
+  protected readonly top = top;
+
+  updateProfile() {
+
   }
 }

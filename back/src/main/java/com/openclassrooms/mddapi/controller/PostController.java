@@ -41,7 +41,7 @@ public class PostController {
     public ResponseEntity<MessageResponse> createPost(@Valid @RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        SimpleUserDto author = this.userService.getSimpleUserDtoByEmail(currentPrincipalName);
+        SimpleUserDto author = this.userService.getSimpleUserDtoByEmailOrUsername(currentPrincipalName);
         if(author == null) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new MessageResponse("Author not found"));
         } else {

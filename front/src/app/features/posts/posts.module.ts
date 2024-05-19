@@ -8,17 +8,25 @@ import { PostFormComponent } from './components/post-form/post-form.component';
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {ButtonModule} from "primeng/button";
 import {InputTextModule} from "primeng/inputtext";
+import { TopicListComponent } from './components/topic-list/topic-list.component';
+import {CardModule} from "primeng/card";
+import { TopicCardComponent } from './components/topic-card/topic-card.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
 
 @NgModule({
     declarations: [
         PostComponent,
         PostListComponent,
-        PostFormComponent
+        PostFormComponent,
+        TopicListComponent,
+        TopicCardComponent,
+        PostCardComponent
     ],
   exports: [
     PostComponent,
     PostListComponent,
-    PostFormComponent
+    PostFormComponent,
+    TopicCardComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +35,8 @@ import {InputTextModule} from "primeng/inputtext";
     ReactiveFormsModule,
     InputTextareaModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    CardModule
   ]
 })
 export class PostsModule { }

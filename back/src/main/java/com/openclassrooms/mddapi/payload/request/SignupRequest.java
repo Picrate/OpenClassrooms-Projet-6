@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 public class SignupRequest {
 
   @NotBlank
-  @Email
   private String email;
 
   @NotBlank

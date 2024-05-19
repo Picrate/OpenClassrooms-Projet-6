@@ -1,0 +1,6 @@
+<p-card header="{{topic.title}}">
+  <p>{{topic.description}}</p>
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-center"><button pButton label="s'abonner" class="p-button p-button-raised" type="button" (click)="manageSubscription(topic)"></button></div>
+  </ng-template>
+</p-card>

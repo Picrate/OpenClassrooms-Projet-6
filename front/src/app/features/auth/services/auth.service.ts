@@ -21,6 +21,7 @@ export class AuthService {
   }
 
   public login(loginRequest: SignInRequest): Observable<any> {
+    console.log(loginRequest);
     return this.httpClient.post(API_AUTH+'/login', loginRequest, httpOptions);
   }
 

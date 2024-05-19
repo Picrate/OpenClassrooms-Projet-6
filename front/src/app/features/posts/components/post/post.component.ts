@@ -12,6 +12,8 @@ import {Location} from "@angular/common";
 })
 export class PostComponent implements OnInit {
 
+
+
   public post!: Post;
   commentForm: FormGroup = this.fb.group({comment: ['']});
 

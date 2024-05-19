@@ -14,7 +14,7 @@ export class SigninComponent implements OnInit{
 
   signinForm = new FormGroup(
     {
-      email: new FormControl('', [Validators.email, Validators.required]),
+      login: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
     }
   );
@@ -37,7 +37,7 @@ export class SigninComponent implements OnInit{
   }
 
   getEmail(){
-    return this.signinForm.get('email');
+    return this.signinForm.get('login');
   }
 
   onSubmit(){
