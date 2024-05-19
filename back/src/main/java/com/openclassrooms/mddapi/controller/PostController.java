@@ -7,6 +7,7 @@ import com.openclassrooms.mddapi.dto.TopicDto;
 import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/posts")
 @CrossOrigin(origins = "http://localhost:4002", maxAge = 3600, allowCredentials="true")
@@ -38,20 +40,16 @@ public class PostController {
 
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<MessageResponse> createPost(@Valid @RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
+    public ResponseEntity<MessageResponse> createPost(@RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         SimpleUserDto author = this.userService.getSimpleUserDtoByEmailOrUsername(currentPrincipalName);
-        if(author == null) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new MessageResponse("Author not found"));
-        } else {
-            String newPostId = this.postService.createNewPost(postDto, author);
-            URI locationOfRelatedPost = ucb
-                    .path("/api/posts/{id}")
-                    .buildAndExpand(newPostId)
-                    .toUri();
-            return ResponseEntity.created(locationOfRelatedPost).build();
-        }
+        String newPostId = this.postService.createNewPost(postDto, author);
+        URI locationOfRelatedPost = ucb
+                .path("/api/posts/{id}")
+                .buildAndExpand(newPostId)
+                .toUri();
+        return ResponseEntity.created(locationOfRelatedPost).build();
     }
 
     @GetMapping("/{id}")
@@ -81,6 +79,20 @@ public class PostController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TopicDto>> getAllTopics() {
         List<TopicDto> topics = this.postService.getAllTopics();
+        if(topics == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok(topics);
+        }
+    }
+
+    @GetMapping("/topics/{title}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<TopicDto>> getAllTopics(@RequestParam String title) {
+        if(title == null || title.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<TopicDto> topics = this.postService.getTopicByTitleContainingIgnoreCase(title);
         if(topics == null) {
             return ResponseEntity.badRequest().build();
         } else {

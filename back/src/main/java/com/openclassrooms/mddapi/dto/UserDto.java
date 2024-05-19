@@ -1,9 +1,13 @@
 package com.openclassrooms.mddapi.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class UserDto  extends SimpleUserDto{
     private List<TopicDto> topics;
     private String updatedAt;

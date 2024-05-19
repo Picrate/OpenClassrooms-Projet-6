@@ -11,11 +11,13 @@ import {NgOptimizedImage} from "@angular/common";
 import {ButtonModule} from "primeng/button";
 import {ToolbarModule} from "primeng/toolbar";
 import {DividerModule} from "primeng/divider";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HeaderComponent, NotFoundComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     NgOptimizedImage,

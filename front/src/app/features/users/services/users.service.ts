@@ -18,8 +18,8 @@ export class UsersService {
     return this.httpClient.get<User>(`${this.pathService}/me`);
   }
 
-  public getUserFeed(): Observable<Array<Post>> {
-    return this.httpClient.get<Array<Post>>(`${this.pathService}/feed`);
+  public getUserFeed(): Observable<Post[]> {
+    return this.httpClient.get<Post[]>(`${this.pathService}/feed`);
   }
 
   public subscribeToTopic(topic: Topic){

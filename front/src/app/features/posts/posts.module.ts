@@ -12,6 +12,7 @@ import { TopicListComponent } from './components/topic-list/topic-list.component
 import {CardModule} from "primeng/card";
 import { TopicCardComponent } from './components/topic-card/topic-card.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
+import {AutoCompleteModule} from "primeng/autocomplete";
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { PostCardComponent } from './components/post-card/post-card.component';
     InputTextareaModule,
     ButtonModule,
     InputTextModule,
-    CardModule
+    CardModule,
+    AutoCompleteModule
   ]
 })
 export class PostsModule { }

@@ -31,7 +31,7 @@ export class MeComponent implements OnInit {
   logOut() {
     this.authService.logout().subscribe(() => {
       this.sessionStorageService.logout();
-      this.router.navigate(['/home']);
+      this.router.navigate(['']);
     });
   }
 

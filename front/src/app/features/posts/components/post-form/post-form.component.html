@@ -1,12 +1,20 @@
-<form id="new-post-form" [formGroup]="topicForm" (ngSubmit)="onSubmit()">
-  <fieldset>
-    <input pInputText type="text" formControlName="topic">
-  </fieldset>
-  <fieldset>
-    <input pInputText id="title" type="text" formControlName="title" placeholder="Titre de l'article" >
-  </fieldset>
-  <fieldset>
-  <textarea pInputText id="content" formControlName="content" placeholder="Contenu de l'article"></textarea>
-  </fieldset>
-  <button pButton type="submit">Créer</button>
+<div class="flex flex-column align-items-center justify-content-center">
+  <div>
+    <h3>Créer un nouvel article</h3>
+  </div>
+  <div class="flex w-full m-2 justify-content-center">
+    <p-autoComplete
+      [(ngModel)]="topic"
+      [suggestions]="topics"
+      (completeMethod)="search($event)"
+      field="title"
+      [minLength]="1"
+      placeholder="Sélectionner un thème">
+    </p-autoComplete>
+  </div>
+<form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="flex flex-column align-items-center justify-content-center w-24rem">
+  <input pInputText id="title" type="text" formControlName="title" placeholder="Titre de l'article" class="p-input-filled m-2 w-full">
+  <textarea rows="10" cols="30" pInputTextarea formControlName="content" class="m-2 w-full" placeholder="Contenu de l'article"></textarea>
+  <button pButton type="submit" class="p-button-raised m-5 w-12rem">Créer</button>
 </form>
+</div>

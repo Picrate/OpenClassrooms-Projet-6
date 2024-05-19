@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TopicRepository extends MongoRepository<Topic, String> {
     public List<Topic> getAllByOrderByTitleAsc();
+    public List<Topic> getTopicByTitleContainingIgnoreCase(String title);
 }

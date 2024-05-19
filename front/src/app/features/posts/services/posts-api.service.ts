@@ -28,11 +28,22 @@ export class PostsApiService {
     return this.httpClient.get<Array<Post>>(`${this.pathService}/topic`, options);
   }
 
-  public createNewPost(newPost: NewPostRequest): void {
-    this.httpClient.post<ErrorMessage>(`${this.pathService}`, newPost);
+  public createNewPost(newPost: NewPostRequest): Observable<any> {
+    return this.httpClient.post<ErrorMessage>(`${this.pathService}`, newPost);
   }
 
   public getTopics(): Observable<Array<Topic>>{
     return this.httpClient.get<Array<Topic>>(`${this.pathService}/topics`);
   }
+
+  public getTopicsByTitle(title: string): Observable<Array<Topic>> {
+    const parameter = title.trim();
+    const options =
+      parameter
+        ? {params: new HttpParams().set('title', parameter)}
+        : {};
+    return this.httpClient.get<Array<Topic>>(`${this.pathService}/topics`, options);
+}
+
+
 }

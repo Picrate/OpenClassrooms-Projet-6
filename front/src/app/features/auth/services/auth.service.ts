@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   public logout(){
-    return this.httpClient.post(API_AUTH+'/logout', {}, httpOptions);
+    return this.httpClient.get(API_AUTH+'/logout');
   }
 
 }

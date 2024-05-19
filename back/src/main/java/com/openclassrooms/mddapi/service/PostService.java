@@ -85,9 +85,10 @@ public class PostService {
         if(topics.isEmpty()) {
             return new ArrayList<>();
         } else {
+            List<Topic> topicList = topicMapper.topicDtoToTopicList(topics);
             Criteria orCriteria = new Criteria();
             List<Criteria> topicsCriterias = new ArrayList<>();
-            for(TopicDto topic : topics){
+            for(Topic topic : topicList){
                 Criteria criteria = Criteria.where("topic").is(topic);
                 topicsCriterias.add(criteria);
             }
@@ -99,6 +100,11 @@ public class PostService {
 
     public List<TopicDto> getAllTopics(){
         List<Topic> topics = this.topicRepository.getAllByOrderByTitleAsc();
+        return topicMapper.topicListToTopicDtoList(topics);
+    }
+
+    public List<TopicDto> getTopicByTitleContainingIgnoreCase(String text){
+        List<Topic> topics = this.topicRepository.getTopicByTitleContainingIgnoreCase(text);
         return topicMapper.topicListToTopicDtoList(topics);
     }
 

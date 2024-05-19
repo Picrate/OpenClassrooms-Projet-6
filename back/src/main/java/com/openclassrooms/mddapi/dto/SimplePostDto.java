@@ -1,15 +1,18 @@
 package com.openclassrooms.mddapi.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 public class SimplePostDto {
     @NotBlank
     private String title;
     @NotBlank
     private String content;
-    @NotBlank
+
     private TopicDto topic;
 }
