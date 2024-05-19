@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {SignInRequest} from "../../interfaces/sign-in-request";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {SessionService} from "../../../../services/session.service";
-import {SessionInformation} from "../../../../interfaces/session-information";
-import {StorageService} from "../../../../services/storage.service";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {SessionStorageService} from "../../../../services/session-storage.service";
 
 @Component({
   selector: 'app-signin',
@@ -28,7 +26,7 @@ export class SigninComponent implements OnInit{
 
   constructor(
     private authService: AuthService,
-    private storageService: StorageService,
+    private storageService: SessionStorageService,
     private routeur: Router,
     ) {}
 
@@ -42,21 +40,18 @@ export class SigninComponent implements OnInit{
     return this.signinForm.get('email');
   }
 
-
   onSubmit(){
     const signinRequest = this.signinForm.value as SignInRequest;
-    this.authService.login(signinRequest).subscribe(
-      (response) => {
-        this.isLogged = true;
-        this.storageService.saveUser(response)
+    this.authService.login(signinRequest).subscribe({
+      next: value => {
+        this.storageService.saveUser(value);
         this.routeur.navigate(['/users/feed']);
       },
-      error => {
+      error: err => {
         this.isLoginFailed = true;
-        this.errorMessage = error;
-        console.log(this.errorMessage);
-      }
-    );
+        this.errorMessage = err.error.message;
+        }
+    });
 
   }
 }

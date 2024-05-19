@@ -3,9 +3,6 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Post} from "../interfaces/post";
 import {NewPostRequest} from "../interfaces/new-post-request";
-import {SessionService} from "../../../services/session.service";
-import {UsersService} from "../../../services/users.service";
-import {User} from "../../users/interfaces/user";
 import {ErrorMessage} from "../../../interfaces/error-message";
 import {Topic} from "../interfaces/topic";
 
@@ -15,9 +12,8 @@ import {Topic} from "../interfaces/topic";
 export class PostsApiService {
 
   private pathService = 'api/posts';
-  private user: User | undefined;
 
-  constructor(private httpClient: HttpClient, private sessionService: SessionService, private userService: UsersService) { }
+  constructor(private httpClient: HttpClient) { }
 
   public getById(postId: string): Observable<Post>{
     return this.httpClient.get<Post>(`${this.pathService}/${postId}`);

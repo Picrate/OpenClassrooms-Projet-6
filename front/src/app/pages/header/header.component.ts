@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
-import {SessionService} from "../../services/session.service";
+import {Observable} from "rxjs";
+import {SessionStorageService} from "../../services/session-storage.service";
 
 @Component({
   selector: 'app-header',
@@ -9,21 +10,19 @@ import {SessionService} from "../../services/session.service";
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private router: Router, private sessionService: SessionService) { }
+  isLoggedIn$ ?: Observable<boolean>;
+
+  constructor(private storageService: SessionStorageService, private router: Router) { }
 
   ngOnInit(): void {
+    this.isLoggedIn$ = this.storageService.isLoggedIn();
   }
 
   goToHome() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/users/feed']);
   }
 
   myProfile() {
     this.router.navigate(['/users/me']);
-  }
-
-  logout() {
-    this.sessionService.logOut();
-    this.router.navigate(['']);
   }
 }

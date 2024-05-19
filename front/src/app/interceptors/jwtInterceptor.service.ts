@@ -3,16 +3,20 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor, HTTP_INTERCEPTORS
+  HttpInterceptor, HTTP_INTERCEPTORS, HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {SessionService} from "../services/session.service";
-import {StorageService} from "../services/storage.service";
+
+import {catchError, Observable} from 'rxjs';
+
+import {SessionStorageService} from "../services/session-storage.service";
 
 @Injectable({ providedIn: "root"})
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private sessionService: SessionService, private storageService: StorageService) {}
+
+  constructor() {}
+
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
     request = request.clone({
       withCredentials: true,
     });

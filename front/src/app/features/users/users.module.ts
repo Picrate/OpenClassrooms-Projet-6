@@ -3,14 +3,10 @@ import { MeComponent } from './components/me/me.component';
 import { FeedComponent } from './components/feed/feed.component';
 import {UsersRoutingModule} from "./users-routing.module";
 import {CommonModule, DatePipe, NgIf} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {MatIconModule} from "@angular/material/icon";
-import {BrowserModule} from "@angular/platform-browser";
 import {PostsModule} from "../posts/posts.module";
-import {MatButtonModule} from "@angular/material/button";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
+import {ButtonModule} from "primeng/button";
+import {SplitButtonModule} from "primeng/splitbutton";
+import {CardModule} from "primeng/card";
 
 @NgModule({
   declarations: [
@@ -26,13 +22,10 @@ import {MatInputModule} from "@angular/material/input";
     UsersRoutingModule,
     DatePipe,
     NgIf,
-    MatCardModule,
-    MatIconModule,
     PostsModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatFormFieldModule,
-    MatInputModule
+    ButtonModule,
+    SplitButtonModule,
+    CardModule,
   ]
 })
 export class UsersModule { }

@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component } from '@angular/core';
+import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {SessionService} from "../../../../services/session.service";
-import {SignInRequest} from "../../interfaces/sign-in-request";
-import {SessionInformation} from "../../../../interfaces/session-information";
 import {SignUpRequest} from "../../interfaces/sign-up-request";
+import {SessionStorageService} from "../../../../services/session-storage.service";
 
 const PASSWORD_VALIDATOR_PATTERN = '/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\S*([^\\w\\s]|[_]))\\S{8,}$/g';
 
@@ -17,6 +15,8 @@ const PASSWORD_VALIDATOR_PATTERN = '/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\
 export class SignupComponent {
   public hide = true;
   public onError = false;
+  public errorMessage = '';
+  public sucessMessage = "Inscription réussie";
 
   signUpForm = this.fb.group({
     username: [
@@ -43,14 +43,19 @@ export class SignupComponent {
     ]
   })
 
-  constructor(private authService: AuthService, private routeur: Router, private fb: FormBuilder, private sessionService: SessionService) {
+  constructor(private authService: AuthService,private fb: FormBuilder, private storageService: SessionStorageService, private router: Router) {
   }
 
   signup() {
     const signUpRequest: SignUpRequest = this.signUpForm.value as SignUpRequest;
-    this.authService.register(signUpRequest).subscribe((response) =>  {
-
-
-
-    })  }
+    this.authService.register(signUpRequest).subscribe({
+      next: value => {
+        this.router.navigate(['/home']);
+      },
+      error: err => {
+        this.onError = true;
+        this.errorMessage = err.error.message;
+      }
+    });
+  }
 }

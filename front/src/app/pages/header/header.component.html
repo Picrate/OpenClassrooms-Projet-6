@@ -1,29 +1,13 @@
-<div class="header">
-  <div class="logo">
-    <img id="logo" src="assets/logo_p6.png" (click)="goToHome()">
-  </div>
-  <mat-nav-list class="list-horizontal">
-    <mat-list-item>
-      <a [routerLink]="['/posts']">Articles</a>
-    </mat-list-item>
-    <mat-list-item>
-      <a [routerLink]="['/posts/topics']">Thèmes</a>
-    </mat-list-item>
-    <mat-list-item>
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="User Menu">
-        <mat-icon fontIcon="account_circle"></mat-icon>
+<div class="flex flex-row w-screen justify-content-between h-6rem">
+    <span class="flex flex-grow-0 align-items-center m-0"><img height="80" src="assets/logo_p6.png" /></span>
+    <div class="flex align-items-center justify-content-between w-18rem mr-2" *ngIf="isLoggedIn$ | async">
+      <a [routerLink]="['/posts']" class="m-2">Articles</a>
+      <a [routerLink]="['/posts/topics']" class="m-2">Thèmes</a>
+      <button pButton  type="button" class="p-button-icon p-button-rounded p-button-secondary" icon="pi pi-user" aria-label="User Menu" (click)="myProfile()">
       </button>
-      <mat-menu #menu="matMenu">
-        <ng-template matMenuContent>
-          <button mat-menu-item (click)="myProfile()">
-            My Profile
-          </button>
-          <button mat-menu-item (click)="logout()">
-            Logout
-          </button>
-        </ng-template>
-      </mat-menu>
-    </mat-list-item>
-  </mat-nav-list>
+    </div>
 </div>
+
+
+
 

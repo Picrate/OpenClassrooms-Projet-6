@@ -1,8 +1,7 @@
-<div class="center">
+<div class="flex flex-column align-items-center justify-content-center">
   <img src="/assets/logo_p6.png" alt="logo" />
-  <div class="buttons">
-    <button mat-raised-button (click)="login()">Se connecter</button>
-    <button mat-raised-button (click)="signin()">S'incrire</button>
+  <div class="buttons flex flex-grow-1 flex-row">
+    <button pButton class="p-button-outlined p-button-secondary" (click)="login()">Se connecter</button>
+    <button pButton class="p-button-outlined p-button-secondary" (click)="signin()">S'incrire</button>
   </div>
-
 </div>

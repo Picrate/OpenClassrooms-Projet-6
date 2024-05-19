@@ -1,20 +1,26 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
-import {StorageService} from "../services/storage.service";
+import {SessionStorageService} from "../services/session-storage.service";
+import {map, Observable, take} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UnauthGuard implements CanActivate {
 
-  constructor(private router: Router, private storageService: StorageService) {}
+  constructor(private router: Router, private storageService: SessionStorageService) {}
 
-  canActivate(): boolean {
-    if (this.storageService.isLoggedIn()) {
-      this.router.navigate(['/home']);
-      return false;
-    }
-    return true;
+  canActivate(): Observable<boolean> {
+    return this.storageService.isLoggedIn().pipe(
+      take(1),
+      map((isLoggedIn: boolean) => {
+        if(isLoggedIn){
+          this.router.navigate(['/users/feed']);
+          return false;
+        }
+        return true;
+      })
+    );
   }
 
 }

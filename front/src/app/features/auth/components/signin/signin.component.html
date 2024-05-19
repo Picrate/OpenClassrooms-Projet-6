@@ -1,21 +1,19 @@
-<div id="signin">
-  <div class="logo">
-    <img src="assets/logo_p6.png">
+<div class="flex flex-column align-content-center justify-content-center w-screen">
+  <div class="flex justify-content-center">
+    <img class="w-24rem" src="assets/logo_p6.png"/>
   </div>
-  <form class="signin-form" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
-    <mat-form-field>
-      <mat-label>
-        Email:
-      </mat-label>
-      <input matNativeControl type="email" formControlName="email">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>
+  <form class="flex flex-column align-items-center" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+    <p *ngIf="isLoginFailed">Erreur d'authentification</p>
+    <div class="p-input-filled flex flex-column align-items-center m-2">
+      <label class="mt-2">
+        Email ou nom d'utilisateur:
+      </label>
+      <input pInputText type="email" formControlName="email">
+      <label class="mt-2">
         Mot de passe:
-      </mat-label>
-        <input matNativeControl type="password" formControlName="password">
-
-    </mat-form-field>
-    <button mat-flat-button color="primary" type="submit" [disabled]="!signinForm.valid">Se connecter</button>
+      </label>
+      <input pInputText type="password" formControlName="password">
+    </div>
+    <button pButton type="submit" [disabled]="!signinForm.valid">Se connecter</button>
   </form>
 </div>

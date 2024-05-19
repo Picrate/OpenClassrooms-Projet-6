@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {SessionInformation} from "../../../interfaces/session-information";
 import {SignInRequest} from "../interfaces/sign-in-request";
 import {SignUpRequest} from "../interfaces/sign-up-request";
-import {ErrorMessage} from "../../../interfaces/error-message";
 
 const httpOptions = {
   headers : new HttpHeaders({'Content-Type':'application/json'})
@@ -15,8 +13,6 @@ const API_AUTH = 'api/auth';
   providedIn: 'root'
 })
 export class AuthService {
-
-
 
   constructor(private httpClient: HttpClient) { }
 
