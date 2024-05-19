@@ -1,4 +1,4 @@
-<div class="flex flex-row w-screen justify-content-between h-6rem">
+<div class="flex flex-row w-screen justify-content-between h-6rem" *ngIf="router.url !== '/'">
     <span class="flex flex-grow-0 align-items-center m-0" (click)="goToHome()"><img height="80" src="assets/logo_p6.png" /></span>
     <div class="flex align-items-center justify-content-between w-18rem mr-2" *ngIf="isLoggedIn$ | async">
       <a [routerLink]="['/posts']" class="m-2">Articles</a>

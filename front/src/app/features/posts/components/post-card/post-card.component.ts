@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Post} from "../../interfaces/post";
+import {PostsApiService} from "../../services/posts-api.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-post-card',
@@ -10,9 +12,12 @@ export class PostCardComponent implements OnInit {
 
   @Input() post!: Post;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
+  openPost(post: Post) {
+    this.router.navigate([`/posts/${post.id}`]);
+  }
 }

@@ -1,14 +1,11 @@
-<div class="post">
-
-  <div class="post-header">
-    <div class="post-title"><button pButton (click)="goBack()">Back</button><h2>{{post.title}}</h2></div>
-    <div class="post-infos"><p>Date: {{post.created_at | date: "longDate"}}</p><p>Auteur: {{post.author.username}}</p><p>Thème: {{post.topic}}</p></div>
-  </div>
-  <div class="post-content">
+<div class="flex flex-column">
+  <div class="flex justify-content-start"><button pButton (click)="goBack()" icon="pi pi-arrow-left" class="p-button-icon-left p-button-secondary p-button-text"></button><h2>{{post.title}}</h2></div>
+  <div class="flex flex-column m-5">
+    <div><p>Date: {{post.created_at | date: "longDate"}}</p><p>Auteur: {{post.author.username}}</p><p>Thème: {{post.topic}}</p></div>
     <p>{{post.content}}</p>
-    <div class="comments">
+    <div class="flex flex-column m-8">
       <p>Commentaires</p>
-      <div class="comment" *ngFor="let comment of post.comments">
+      <div  *ngFor="let comment of post.comments">
         <p>{{comment.author}}</p>
         <p>{{comment.content}}</p>
       </div>

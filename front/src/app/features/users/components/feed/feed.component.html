@@ -1,9 +1,9 @@
-<div class="my-feed">
-  <div class="feed-header">
+<div class="flex flex-column m-5">
+  <div class="flex flex-grow-1 justify-content-between">
     <button pButton (click)="addArticle()">Créer un article</button>
     <button pButton label="Trier Par" icon="pi pi-arrow-down" iconPos="right" class="p-button-text p-button-secondary"></button>
   </div>
-  <div class="posts">
+  <div>
     <app-post-list [postList]="myFeedList$"></app-post-list>
   </div>
 </div>

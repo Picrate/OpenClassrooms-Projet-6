@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
 
   isLoggedIn$ ?: Observable<boolean>;
 
-  constructor(private storageService: SessionStorageService, private router: Router) { }
+  constructor(private storageService: SessionStorageService, public router: Router) { }
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.storageService.isLoggedIn();
