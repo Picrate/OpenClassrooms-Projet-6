@@ -1,19 +1,16 @@
-<div class="flex flex-column align-content-center justify-content-center w-screen">
-  <div class="flex justify-content-center">
-    <img class="w-24rem" src="assets/logo_p6.png"/>
+<div id="signup">
+  <div *ngIf="!hideLogo" class="flex justify-content-center">
+    <img class="logo" src="assets/logo_p6.png"/>
   </div>
-  <form class="flex flex-column align-items-center" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
-    <p *ngIf="isLoginFailed">Erreur d'authentification</p>
-    <div class="p-input-filled flex flex-column align-items-center m-2">
-      <label class="mt-2">
-        Email ou nom d'utilisateur:
-      </label>
-      <input pInputText type="text" formControlName="login">
-      <label class="mt-2">
-        Mot de passe:
-      </label>
-      <input pInputText type="password" formControlName="password">
+  <h2 class="m-0">Se connecter</h2>
+  <form class="signup-form mt-2" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+    <p *ngIf="isLoginFailed" class="p-error">Erreur d'authentification</p>
+    <label class="mt-4">E-mail ou nom d'utilisateur</label>
+    <input pInputText type="text" formControlName="login">
+    <label class="mt-4">Mot de passe</label>
+    <input pInputText type="password" formControlName="password">
+    <div class="flex justify-content-center mt-4">
+    <button pButton type="submit" label="Se connecter" [disabled]="!signinForm.valid" class="mt-2 w-fit"></button>
     </div>
-    <button pButton type="submit" [disabled]="!signinForm.valid">Se connecter</button>
   </form>
 </div>

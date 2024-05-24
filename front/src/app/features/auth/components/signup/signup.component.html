@@ -1,27 +1,18 @@
 <div id="signup">
-  <div class="logo">
-    <img src="assets/logo_p6.png">
+  <div *ngIf="!hideLogo" class="flex justify-content-center">
+    <img class="logo" src="assets/logo_p6.png"/>
   </div>
-  <form class="signup-form" [formGroup]="signUpForm" (ngSubmit)="signup()">
-    <fieldset>
-      <label>
-        Username:
-      </label>
-      <input pInputText type="text" formControlName="username">
-    </fieldset>
-    <fieldset>
-      <label>
-        Email:
-      </label>
-      <input pInputText type="email" formControlName="email">
-    </fieldset>
-    <fieldset>
-      <label>
-        Mot de passe:
-      </label>
-      <input pInputText type="password" formControlName="password">
-    </fieldset>
-    <button pButton color="primary" type="submit">S'inscrire</button>
+  <h2 class="m-0">Inscription</h2>
+  <form class="signup-form mt-4" [formGroup]="signUpForm" (ngSubmit)="signup()">
+    <label>Nom d'utilisateur</label>
+    <input class="p-fluid mb-2" pInputText type="text" formControlName="username">
+    <label>Adresse e-mail</label>
+    <input class="p-fluid mb-2" pInputText type="email" formControlName="email">
+    <label>Mot de passe</label>
+    <input class="p-fluid mb-2" pInputText type="password" formControlName="password">
+    <div class="flex justify-content-center">
+    <button class="mt-2 w-fit" label="S'inscrire" pButton color="primary" type="submit"></button>
+    </div>
   </form>
 </div>
 

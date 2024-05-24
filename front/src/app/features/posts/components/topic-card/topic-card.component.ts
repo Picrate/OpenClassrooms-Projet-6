@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Topic} from "../../interfaces/topic";
+import {UsersService} from "../../../users/services/users.service";
 
 @Component({
   selector: 'app-topic-card',
@@ -9,12 +10,23 @@ import {Topic} from "../../interfaces/topic";
 export class TopicCardComponent implements OnInit {
 
   @Input() topic!: Topic
+  @Input() buttonLabel: string = 'S\'abonner';
 
-  constructor() {}
+  constructor(private userService: UsersService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   manageSubscription(topic: Topic) {
+      this.userService.manageTopicSubscription(topic).subscribe(response => {
+        console.log(response);
+      });
+      this.toggleLabel();
 
   }
+
+  toggleLabel() {
+    this.buttonLabel === "S'abonner" ? this.buttonLabel = "Se désabonner" : this.buttonLabel = "S'abonner";
+  }
+
 }

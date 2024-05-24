@@ -1,6 +1,10 @@
+<div class="grid">
 <p-card header="{{topic.title}}">
-  <p>{{topic.description}}</p>
-  <ng-template pTemplate="footer">
-    <div class="flex justify-content-center"><button pButton label="s'abonner" class="p-button p-button-raised" type="button" (click)="manageSubscription(topic)"></button></div>
+  <ng-template pTemplate="content">
+  <p class="col-12 truncate-overflow">{{topic.description}}</p>
+  </ng-template>
+  <ng-template pTemplate="footer" class="col-12 m-0">
+      <button pButton class="p-button p-button-raised" type="button" (click)="manageSubscription(topic)">{{buttonLabel}}</button>
   </ng-template>
 </p-card>
+</div>

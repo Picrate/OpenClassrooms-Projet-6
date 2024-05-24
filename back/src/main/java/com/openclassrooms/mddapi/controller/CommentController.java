@@ -7,6 +7,8 @@ import com.openclassrooms.mddapi.model.Post;
 import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,7 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:4002", maxAge = 3600, allowCredentials="true")
 public class CommentController {
 
+    private static final Logger log = LoggerFactory.getLogger(CommentController.class);
     private final String  INVALID_COMMENT = "Invalid post comment";
 
     private final PostService postService;
@@ -41,10 +44,11 @@ public class CommentController {
     public ResponseEntity<MessageResponse> createComment(@RequestBody PostCommentDto postComment, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        if (postComment == null || postComment.getPost_id() == null) {
+        log.info(postComment.toString());
+        if (postComment == null || postComment.getPostId() == null) {
             return ResponseEntity.badRequest().body(new MessageResponse(INVALID_COMMENT));
         }else {
-            Post postToAddComment = postService.getPostById(postComment.getPost_id());
+            Post postToAddComment = postService.getPostById(postComment.getPostId());
             if (postToAddComment == null) {
                 return ResponseEntity.badRequest().body(new MessageResponse(INVALID_COMMENT));
             } else {

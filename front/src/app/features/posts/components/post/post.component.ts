@@ -4,6 +4,9 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostsApiService} from "../../services/posts-api.service";
 import {Location} from "@angular/common";
+import {NewPostRequest} from "../../interfaces/new-post-request";
+import {Comment} from "../../interfaces/comment";
+import {NewPostComment} from "../../interfaces/new-post-comment";
 
 @Component({
   selector: 'app-post',
@@ -11,8 +14,6 @@ import {Location} from "@angular/common";
   styleUrls: ['./post.component.scss'],
 })
 export class PostComponent implements OnInit {
-
-
 
   public post!: Post;
   commentForm: FormGroup = this.fb.group({comment: ['']});
@@ -33,5 +34,12 @@ export class PostComponent implements OnInit {
   }
 
   postComment() {
+    const newComment: NewPostComment = {
+      postId: this.post.id,
+      comment: this.commentForm.value.comment
+    }
+    this.postService.postNewComment(newComment).subscribe(p => {
+      console.log(p);
+    })
   }
 }

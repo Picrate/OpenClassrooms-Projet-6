@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {SignInRequest} from "../../interfaces/sign-in-request";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {SessionStorageService} from "../../../../services/session-storage.service";
+import {Observable, of} from "rxjs";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-signin',
@@ -11,6 +13,8 @@ import {SessionStorageService} from "../../../../services/session-storage.servic
   styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent implements OnInit{
+
+  hideLogo: boolean = false;
 
   signinForm = new FormGroup(
     {
@@ -27,13 +31,27 @@ export class SigninComponent implements OnInit{
   constructor(
     private authService: AuthService,
     private storageService: SessionStorageService,
-    private routeur: Router,
-    ) {}
+    private router: Router,
+    private responsive: BreakpointObserver
+    ) {
+
+  }
 
   ngOnInit(): void {
+
+    this.responsive.observe([
+      Breakpoints.XSmall,
+    ]).subscribe(result => {
+      this.hideLogo = true;
+      if(result.matches){
+        this.hideLogo = false;
+      }
+    })
+
     if(this.storageService.isLoggedIn())
       this.isLogged = true;
       this.roles = this.storageService.getUser()?.roles;
+
   }
 
   getEmail(){
@@ -45,7 +63,7 @@ export class SigninComponent implements OnInit{
     this.authService.login(signinRequest).subscribe({
       next: value => {
         this.storageService.saveUser(value);
-        this.routeur.navigate(['/users/feed']);
+        this.router.navigate(['/users/feed']);
       },
       error: err => {
         this.isLoginFailed = true;
@@ -54,4 +72,19 @@ export class SigninComponent implements OnInit{
     });
 
   }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      this.log(`${operation} failed: ${error.message}`);
+
+      return of(result as T);
+    };
+  }
+
+  private log(message: string) {
+    console.log(message);
+  }
+
+
 }

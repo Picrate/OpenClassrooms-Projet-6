@@ -67,7 +67,7 @@ public class UserController {
             this.userService.updateUser(updatedUserDto);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.unprocessableEntity().body(new MessageResponse("Email already used."));
+            return ResponseEntity.unprocessableEntity().body(new MessageResponse("Can't update account"));
         }
     }
 
@@ -105,6 +105,12 @@ public class UserController {
         return ResponseEntity.ok(posts);
     }
 
+    @PostMapping("/exists")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MessageResponse> isUserExists(@RequestBody @Valid UserExistsRequestDto userDto){
+        boolean response = this.userService.existsByEmailOrUsername(userDto.getUsernameOrEmail());
+        return ResponseEntity.ok(new MessageResponse(String.valueOf(response)));
+    }
 
     private String getCurrentPrincipalName(SecurityContext securityContext){
         Authentication authentication = securityContext.getAuthentication();

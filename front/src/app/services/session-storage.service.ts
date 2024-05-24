@@ -24,16 +24,15 @@ export class SessionStorageService {
     this.loggedIn.next(true);
   }
 
-  public getUser(): SessionInformation | undefined{
+  public getUser(): SessionInformation{
     const userSession = window.sessionStorage.getItem(USER_KEY);
     if(userSession){
       return JSON.parse(userSession);
     }
-    return undefined;
+    return JSON.parse('{}');
   }
 
   public isLoggedIn(): Observable<boolean> {
-    console.log(this.loggedIn);
     return this.loggedIn.asObservable();
   }
 }

@@ -56,15 +56,20 @@ public class UserService {
         }
     }
 
-    public void updateUser(UpdatedUserDto currentUser) {
-        Optional<User> user = this.userRepository.findByEmail(currentUser.getEmail());
+    public void updateUser(UpdatedUserDto newUserInfos) {
+        Optional<User> user = this.userRepository.findById(newUserInfos.getId());
         if (user.isPresent()) {
             User userToUpdate = user.get();
-            userToUpdate.setEmail(currentUser.getEmail());
-            userToUpdate.setUsername(currentUser.getUsername());
-            userToUpdate.setPassword(passwordEncoder.encode(currentUser.getPassword()));
+            if(newUserInfos.getPassword() != null) {
+                userToUpdate.setPassword(passwordEncoder.encode(newUserInfos.getPassword()));
+            }
+            if(newUserInfos.getEmail() != null) {
+                userToUpdate.setEmail(newUserInfos.getEmail());
+            }
+            if(newUserInfos.getUsername() != null) {
+                userToUpdate.setUsername(newUserInfos.getUsername());
+            }
             userToUpdate.setUpdatedAt(LocalDateTime.now());
-            userToUpdate.setTopics(topicMapper.topicDtoToTopicList(currentUser.getTopics()));
             userRepository.save(userToUpdate);
         }
     }

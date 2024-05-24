@@ -24,13 +24,13 @@ export class PostFormComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  // TODO Traiter le retour
   onSubmit() {
     const newPost: NewPostRequest = {
       title: this.topicForm.value.title,
       content: this.topicForm.value.content,
       topic: this.topic
     }
-    console.log(this.topic);
     this.postApiService.createNewPost(newPost).subscribe(response => {
       console.log(response);
     });

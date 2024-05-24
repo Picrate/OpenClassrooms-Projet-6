@@ -40,7 +40,7 @@ public class PostController {
 
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<MessageResponse> createPost(@RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
+    public ResponseEntity<String> createPost(@RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         SimpleUserDto author = this.userService.getSimpleUserDtoByEmailOrUsername(currentPrincipalName);
@@ -77,24 +77,18 @@ public class PostController {
 
     @GetMapping("/topics")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<TopicDto>> getAllTopics() {
-        List<TopicDto> topics = this.postService.getAllTopics();
-        if(topics == null) {
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok(topics);
-        }
-    }
-
-    @GetMapping("/topics/{title}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<TopicDto>> getAllTopics(@RequestParam String title) {
+    public ResponseEntity<List<TopicDto>> getTopicsByTitle(@RequestParam String title) {
         if(title == null || title.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            List<TopicDto> topics = this.postService.getAllTopics();
+            if(topics == null) {
+                return ResponseEntity.internalServerError().build();
+            } else {
+                return ResponseEntity.ok(topics);
+            }
         }
         List<TopicDto> topics = this.postService.getTopicByTitleContainingIgnoreCase(title);
         if(topics == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(topics);
         }

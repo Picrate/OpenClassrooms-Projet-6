@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {User} from "../interfaces/user";
 import {Post} from "../../posts/interfaces/post";
 import {Topic} from "../../posts/interfaces/topic";
+import {ResponseMessage} from "../../../interfaces/response-message";
+import {UpdateProfileRequest} from "../interfaces/update-profile-request";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class UsersService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getUSerProfile(): Observable<User> {
+  public getUserProfile(): Observable<User> {
     return this.httpClient.get<User>(`${this.pathService}/me`);
   }
 
@@ -22,8 +24,28 @@ export class UsersService {
     return this.httpClient.get<Post[]>(`${this.pathService}/feed`);
   }
 
-  public subscribeToTopic(topic: Topic){
+  public getUserTopics(): Observable<Array<Topic>> {
+    return this.httpClient.get<Array<Topic>>(`${this.pathService}/topics`);
+  }
+
+  public manageTopicSubscription(topic: Topic){
     return this.httpClient.put<any>(`${this.pathService}/topics`, topic);
   }
 
+  public updateProfile(updateProfile: UpdateProfileRequest): Observable<ResponseMessage>{
+    return this.httpClient.put<ResponseMessage>(`${this.pathService}/me`, updateProfile);
+  }
+
+  public isUsernameOrEmailAlreadyExists(usernameOrEmail: string): Observable<ResponseMessage>{
+    console.log(usernameOrEmail);
+    if(usernameOrEmail === null){
+      return of({message: "false"});
+    } else {
+      let request = {
+        usernameOrEmail : usernameOrEmail
+      }
+      console.log(request);
+      return this.httpClient.post<ResponseMessage>(`${this.pathService}/exists`, request);
+    }
+  }
 }

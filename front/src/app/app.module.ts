@@ -12,19 +12,27 @@ import {ButtonModule} from "primeng/button";
 import {ToolbarModule} from "primeng/toolbar";
 import {DividerModule} from "primeng/divider";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MessagesModule} from "primeng/messages";
+import {MessageModule} from "primeng/message";
+import {ToastModule} from "primeng/toast";
+import {ImageModule} from "primeng/image";
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HeaderComponent, NotFoundComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    NgOptimizedImage,
-    ButtonModule,
-    ToolbarModule,
-    DividerModule,
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        NgOptimizedImage,
+        ButtonModule,
+        ToolbarModule,
+        DividerModule,
+        MessagesModule,
+        MessageModule,
+        ToastModule,
+        ImageModule,
+    ],
   providers: [
     httpInterceptorProviders,
   ],

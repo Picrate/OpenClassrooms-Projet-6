@@ -5,9 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class PostCommentDto {
+public class UserExistsRequestDto {
     @NotBlank
-    private String postId;
-    @NotBlank
-    private String comment;
+    String usernameOrEmail;
 }

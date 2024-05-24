@@ -1,8 +1,8 @@
-<div class="flex flex-column align-items-center justify-content-center">
-  <div>
+<div class="grid">
+  <div class="col-12 text-center">
     <h3>Créer un nouvel article</h3>
   </div>
-  <div class="flex w-full m-2 justify-content-center">
+  <div class="col-10 col-offset-1 lg:col-4 lg:col-offset-4 align-items-center">
     <p-autoComplete
       [(ngModel)]="topic"
       [suggestions]="topics"
@@ -12,9 +12,10 @@
       placeholder="Sélectionner un thème">
     </p-autoComplete>
   </div>
-<form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="flex flex-column align-items-center justify-content-center w-24rem">
+<form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="col-10 col-offset-1 lg:col-4 lg:col-offset-4 align-items-center">
   <input pInputText id="title" type="text" formControlName="title" placeholder="Titre de l'article" class="p-input-filled m-2 w-full">
-  <textarea rows="10" cols="30" pInputTextarea formControlName="content" class="m-2 w-full" placeholder="Contenu de l'article"></textarea>
-  <button pButton type="submit" class="p-button-raised m-5 w-12rem">Créer</button>
+  <textarea pInputTextarea formControlName="content" class="m-2 w-full h-full" placeholder="Contenu de l'article"></textarea>
+  <div class="flex justify-content-center w-full"><button pButton type="submit" class="p-button-raised w-12rem">Créer</button></div>
+
 </form>
 </div>

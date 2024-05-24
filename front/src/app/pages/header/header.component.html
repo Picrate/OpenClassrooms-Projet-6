@@ -1,8 +1,15 @@
 <div class="flex flex-row w-screen justify-content-between h-6rem" *ngIf="router.url !== '/'">
-    <span class="flex flex-grow-0 align-items-center m-0" (click)="goToHome()"><img height="80" src="assets/logo_p6.png" /></span>
+    <span class="flex flex-grow-0 align-items-center m-0" (click)="goToHome()">
+      <div *ngIf="!xs || !router.url.includes('/auth'); else showArrow">
+        <img height="80px" src="assets/logo_p6.png" />
+      </div>
+      <ng-template #showArrow>
+        <i class="pi pi-arrow-left m-4" style="font-size: 2rem;"></i>
+      </ng-template>
+      </span>
     <div class="flex align-items-center justify-content-between w-18rem mr-2" *ngIf="isLoggedIn$ | async">
-      <a [routerLink]="['/posts']" class="m-2">Articles</a>
-      <a [routerLink]="['/posts/topics']" class="m-2">Thèmes</a>
+      <a class="p-2" routerLink="/users/feed" routerLinkActive="active">Articles</a>
+      <a class="p-2" routerLink="/posts/topics" routerLinkActive="active">Themes</a>
       <button pButton  type="button" class="p-button-icon p-button-rounded p-button-secondary" icon="pi pi-user" aria-label="User Menu" (click)="myProfile()">
       </button>
     </div>

@@ -1,3 +1,11 @@
-<p-card header="{{post.title}}" subheader="{{post.created_at | date:'dd/MMM/YYYY'}} {{post.author.username}}" (click)="openPost(post)">
-  <p>{{post.content}}</p>
+<p-card header="{{post.title}}" (click)="openPost(post)" (keydown.enter)="openPost(post)" class="bg-gray-300">
+  <ng-template pTemplate="subtitle">
+    <div class="grid">
+        <span class="col-6">{{post.createdAt | date:'dd/MM/YYYY'}}</span>
+        <span class="col-6">{{post.author.username}}</span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="content" class="p-0">
+    <p class="truncate-overflow">{{post.content}}</p>
+  </ng-template>
 </p-card>

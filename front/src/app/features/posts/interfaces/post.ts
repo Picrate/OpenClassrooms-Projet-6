@@ -7,7 +7,7 @@ export interface Post {
   title: string;
   content: string;
   topic: Topic;
-  created_at: Date;
+  createdAt: Date;
   author: Author;
   comments: Array<Comment>;
 }

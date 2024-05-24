@@ -9,11 +9,13 @@ import {SplitButtonModule} from "primeng/splitbutton";
 import {CardModule} from "primeng/card";
 import {InputTextModule} from "primeng/inputtext";
 import {SplitterModule} from "primeng/splitter";
+import {MessageModule} from "primeng/message";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     MeComponent,
-    FeedComponent
+    FeedComponent,
   ],
   exports: [
     MeComponent,
@@ -30,6 +32,8 @@ import {SplitterModule} from "primeng/splitter";
     CardModule,
     InputTextModule,
     SplitterModule,
+    MessageModule,
+    ReactiveFormsModule,
   ]
 })
 export class UsersModule { }

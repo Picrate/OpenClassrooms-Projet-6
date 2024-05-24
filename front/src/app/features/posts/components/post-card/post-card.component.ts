@@ -20,4 +20,7 @@ export class PostCardComponent implements OnInit {
   openPost(post: Post) {
     this.router.navigate([`/posts/${post.id}`]);
   }
+
+  protected readonly onkeydown = onkeydown;
+  protected readonly KeyboardEvent = KeyboardEvent;
 }

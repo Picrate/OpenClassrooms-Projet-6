@@ -55,7 +55,7 @@ public class PostService {
     }
 
     public String addCommentToPost(SimpleUserDto user, PostCommentDto postCommentDto){
-        String postId = postCommentDto.getPost_id();
+        String postId = postCommentDto.getPostId();
         Optional<Post> post = postRepository.findById(postId);
         if(post.isPresent()) {
             Post postObj = post.get();

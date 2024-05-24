@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {SignUpRequest} from "../../interfaces/sign-up-request";
 import {SessionStorageService} from "../../../../services/session-storage.service";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 const PASSWORD_VALIDATOR_PATTERN = '/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\S*([^\\w\\s]|[_]))\\S{8,}$/g';
 
@@ -12,11 +13,12 @@ const PASSWORD_VALIDATOR_PATTERN = '/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent {
-  public hide = true;
-  public onError = false;
-  public errorMessage = '';
-  public sucessMessage = "Inscription réussie";
+export class SignupComponent  implements OnInit{
+
+  onError = false;
+  errorMessage = '';
+  sucessMessage = "Inscription réussie";
+  hideLogo = false;
 
   signUpForm = this.fb.group({
     username: [
@@ -43,7 +45,23 @@ export class SignupComponent {
     ]
   })
 
-  constructor(private authService: AuthService,private fb: FormBuilder, private storageService: SessionStorageService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private router: Router,
+    private responsive: BreakpointObserver
+    ) {
+  }
+
+  ngOnInit(): void {
+    this.responsive.observe([
+      Breakpoints.XSmall,
+    ]).subscribe(result => {
+      this.hideLogo = true;
+      if(result.matches){
+        this.hideLogo = false;
+      }
+    })
   }
 
   signup() {
@@ -58,4 +76,6 @@ export class SignupComponent {
       }
     });
   }
+
+
 }

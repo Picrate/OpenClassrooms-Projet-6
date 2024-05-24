@@ -1,22 +1,29 @@
-<div class="flex flex-column">
-  <div class="flex justify-content-start"><button pButton (click)="goBack()" icon="pi pi-arrow-left" class="p-button-icon-left p-button-secondary p-button-text"></button><h2>{{post.title}}</h2></div>
-  <div class="flex flex-column m-5">
-    <div><p>Date: {{post.created_at | date: "longDate"}}</p><p>Auteur: {{post.author.username}}</p><p>Thème: {{post.topic}}</p></div>
-    <p>{{post.content}}</p>
-    <div class="flex flex-column m-8">
-      <p>Commentaires</p>
-      <div  *ngFor="let comment of post.comments">
-        <p>{{comment.author}}</p>
-        <p>{{comment.content}}</p>
-      </div>
+<div class="flex flex-column w-full">
+  <div id="post-header" class="flex justify-content-start">
+    <button pButton (click)="goBack()" icon="pi pi-arrow-left" class="p-button-icon-left p-button-secondary p-button-text"></button>
+    <h2>{{post.title}}</h2></div>
+  <div id="post-content" class="flex flex-column ml-2 lg:ml-5 lg:mr-auto w-full">
+    <div id="post-infos" class="grid">
+      <p class="col-12 lg:col-2">Date: {{post.createdAt | date:'dd/MM/YYYY'}}</p>
+      <p class="col-12 lg:col-2">Auteur: {{post.author.username}}</p>
+      <p class="col-12 lg:col-2">Thème: {{post.topic.title}}</p>
     </div>
-    <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="postComment()">
-      <fieldset>
-        <textarea pInputTextarea formControlName="comment" placeholder="Ecrivez votre commentaire ici"></textarea>
-      </fieldset>
-      <button pButton type="submit">
-
-      </button>
-    </form>
+    <p>{{post.content}}</p>
+    <p-divider></p-divider>
+    <p>Commentaires</p>
+    <div class="grid">
+      <div id="post-comments" class="col-10 col-offset-1">
+        <div *ngFor="let comment of post.comments; index as index" id="post-comment-{{index}}">
+          <p class="col-3">{{comment.author.username}}</p>
+          <p class="col-7 comment-content m-0">{{comment.content}}</p>
+        </div>
+      </div>
+      <form id="new-comment-form" class="col-12" [formGroup]="commentForm" (ngSubmit)="postComment()">
+        <textarea pInputTextarea formControlName="comment" placeholder="Ecrivez votre commentaire ici" class="col-11"></textarea>
+        <button pButton type="submit" class="p-button p-button-text col-1">
+          <i class="pi pi-send" style="font-size: 2rem"></i>
+        </button>
+      </form>
+    </div>
   </div>
 </div>
