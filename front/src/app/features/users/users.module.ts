@@ -11,6 +11,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {SplitterModule} from "primeng/splitter";
 import {MessageModule} from "primeng/message";
 import {ReactiveFormsModule} from "@angular/forms";
+import {DividerModule} from "primeng/divider";
 
 @NgModule({
   declarations: [
@@ -21,19 +22,20 @@ import {ReactiveFormsModule} from "@angular/forms";
     MeComponent,
     FeedComponent
   ],
-  imports: [
-    CommonModule,
-    UsersRoutingModule,
-    DatePipe,
-    NgIf,
-    PostsModule,
-    ButtonModule,
-    SplitButtonModule,
-    CardModule,
-    InputTextModule,
-    SplitterModule,
-    MessageModule,
-    ReactiveFormsModule,
-  ]
+    imports: [
+        CommonModule,
+        UsersRoutingModule,
+        DatePipe,
+        NgIf,
+        PostsModule,
+        ButtonModule,
+        SplitButtonModule,
+        CardModule,
+        InputTextModule,
+        SplitterModule,
+        MessageModule,
+        ReactiveFormsModule,
+        DividerModule,
+    ]
 })
 export class UsersModule { }

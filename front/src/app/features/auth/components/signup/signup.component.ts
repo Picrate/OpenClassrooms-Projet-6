@@ -5,6 +5,9 @@ import {Router} from "@angular/router";
 import {SignUpRequest} from "../../interfaces/sign-up-request";
 import {SessionStorageService} from "../../../../services/session-storage.service";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {UniqueUsernameOrEmailValidator} from "../../../users/validators/unique-username-or-email-validator";
+import {UsersService} from "../../../users/services/users.service";
+import {passwordValidator} from "../../../users/validators/password-validator";
 
 const PASSWORD_VALIDATOR_PATTERN = '/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\S*([^\\w\\s]|[_]))\\S{8,}$/g';
 
@@ -18,14 +21,16 @@ export class SignupComponent  implements OnInit{
   onError = false;
   errorMessage = '';
   sucessMessage = "Inscription réussie";
+  submitted= false;
   hideLogo = false;
+  isRegistred: boolean = false;
 
   signUpForm = this.fb.group({
     username: [
       '',
       [
         Validators.required,
-        Validators.min(3)
+        Validators.min(8)
       ]
     ],
     email: [
@@ -39,14 +44,14 @@ export class SignupComponent  implements OnInit{
       '',
       [
         Validators.required,
-        Validators.min(8),
-        Validators.pattern(PASSWORD_VALIDATOR_PATTERN)
+        passwordValidator
       ]
     ]
   })
 
   constructor(
     private authService: AuthService,
+    private userService: UsersService,
     private fb: FormBuilder,
     private router: Router,
     private responsive: BreakpointObserver
@@ -66,9 +71,11 @@ export class SignupComponent  implements OnInit{
 
   signup() {
     const signUpRequest: SignUpRequest = this.signUpForm.value as SignUpRequest;
+    console.log(signUpRequest);
     this.authService.register(signUpRequest).subscribe({
       next: value => {
-        this.router.navigate(['/home']);
+        this.isRegistred = true;
+        this.router.navigate(['']);
       },
       error: err => {
         this.onError = true;
@@ -77,5 +84,7 @@ export class SignupComponent  implements OnInit{
     });
   }
 
-
+  get f(){
+    return this.signUpForm.controls;
+  }
 }

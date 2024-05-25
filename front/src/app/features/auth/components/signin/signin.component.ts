@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {SignInRequest} from "../../interfaces/sign-in-request";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {SessionStorageService} from "../../../../services/session-storage.service";
-import {Observable, of} from "rxjs";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
@@ -42,20 +41,17 @@ export class SigninComponent implements OnInit{
     this.responsive.observe([
       Breakpoints.XSmall,
     ]).subscribe(result => {
-      this.hideLogo = true;
-      if(result.matches){
-        this.hideLogo = false;
-      }
+      this.hideLogo = !result.matches;
     })
 
-    if(this.storageService.isLoggedIn())
+    if(this.storageService.isLoggedIn()){
       this.isLogged = true;
       this.roles = this.storageService.getUser()?.roles;
-
+    }
   }
 
-  getEmail(){
-    return this.signinForm.get('login');
+  get f(){
+    return this.signinForm.controls;
   }
 
   onSubmit(){
@@ -72,19 +68,4 @@ export class SigninComponent implements OnInit{
     });
 
   }
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(error);
-      this.log(`${operation} failed: ${error.message}`);
-
-      return of(result as T);
-    };
-  }
-
-  private log(message: string) {
-    console.log(message);
-  }
-
-
 }

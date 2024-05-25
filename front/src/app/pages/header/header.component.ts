@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit {
 
   isLoggedIn$ ?: Observable<boolean>;
   xs = false;
+  display: boolean = false;
 
   constructor(
     private storageService: SessionStorageService,
@@ -31,10 +32,24 @@ export class HeaderComponent implements OnInit {
   }
 
   goToHome() {
+    if(this.display){
+      this.display = false;
+    }
     this.router.navigate(['/users/feed']);
   }
 
+  goTopics() {
+    if(this.display){
+      this.display = false;
+    }
+    this.router.navigate(['/posts/topics']);
+  }
+
   myProfile() {
+    if(this.display){
+      this.display = false;
+    }
     this.router.navigate(['/users/me']);
   }
+
 }

@@ -6,19 +6,21 @@ import {AuthRoutingModule} from "./auth-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InputTextModule} from "primeng/inputtext";
 import {ButtonModule} from "primeng/button";
+import {MessageModule} from "primeng/message";
 
 @NgModule({
   declarations: [
     SigninComponent,
     SignupComponent
   ],
-  imports: [
-    AuthRoutingModule,
-    CommonModule,
-    FormsModule,
-    InputTextModule,
-    ButtonModule,
-    ReactiveFormsModule,
-  ]
+    imports: [
+        AuthRoutingModule,
+        CommonModule,
+        FormsModule,
+        InputTextModule,
+        ButtonModule,
+        ReactiveFormsModule,
+        MessageModule,
+    ]
 })
 export class AuthModule {}

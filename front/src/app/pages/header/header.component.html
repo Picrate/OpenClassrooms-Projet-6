@@ -1,18 +1,37 @@
 <div class="flex flex-row w-screen justify-content-between h-6rem" *ngIf="router.url !== '/'">
-    <span class="flex flex-grow-0 align-items-center m-0" (click)="goToHome()">
+  <span class="flex flex-grow-0 align-items-center m-0" (click)="goToHome()">
       <div *ngIf="!xs || !router.url.includes('/auth'); else showArrow">
         <img height="80px" src="assets/logo_p6.png" />
       </div>
       <ng-template #showArrow>
         <i class="pi pi-arrow-left m-4" style="font-size: 2rem;"></i>
       </ng-template>
-      </span>
-    <div class="flex align-items-center justify-content-between w-18rem mr-2" *ngIf="isLoggedIn$ | async">
-      <a class="p-2" routerLink="/users/feed" routerLinkActive="active">Articles</a>
-      <a class="p-2" routerLink="/posts/topics" routerLinkActive="active">Themes</a>
-      <button pButton  type="button" class="p-button-icon p-button-rounded p-button-secondary" icon="pi pi-user" aria-label="User Menu" (click)="myProfile()">
-      </button>
+  </span>
+  <div *ngIf="isLoggedIn$ | async">
+    <div *ngIf="xs; else header">
+        <p-sidebar [(visible)]="display" position="right" [showCloseIcon]=false styleClass="p-sidebar-right">
+          <ng-template pTemplate="content">
+            <div class="flex flex-column align-items-end justify-content-between h-full">
+              <div>
+                <div><button pButton  type="button" class="p-button-secondary p-button-text text-3xl" label="Articles" routerLinkActive="active" (click)="goToHome()"></button></div>
+                <div><button pButton  type="button" class="p-button-secondary p-button-text text-3xl" label="Themes" routerLinkActive="active" (click)="goTopics()"></button></div>
+              </div>
+            <button pButton  type="button" class="p-button-icon p-button-rounded p-button-secondary mt-8" icon="pi pi-user" aria-label="User Menu" (click)="myProfile()"></button>
+            </div>
+            </ng-template>
+        </p-sidebar>
+        <button pButton type="button" (click)="display = true" icon="pi pi-bars" class="p-button-rounded p-button-secondary p-button-text" style="font-size: 2rem;"></button>
     </div>
+    <ng-template #header>
+      <div class="flex align-items-center justify-content-between w-18rem mr-2" >
+        <a class="p-2" routerLink="/users/feed" routerLinkActive="active">Articles</a>
+        <a class="p-2" routerLink="/posts/topics" routerLinkActive="active">Themes</a>
+        <button pButton  type="button" class="p-button-icon p-button-rounded p-button-secondary" icon="pi pi-user" aria-label="User Menu" (click)="myProfile()">
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
 </div>
 
 

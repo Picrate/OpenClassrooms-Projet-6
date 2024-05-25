@@ -16,6 +16,7 @@ import {MessagesModule} from "primeng/messages";
 import {MessageModule} from "primeng/message";
 import {ToastModule} from "primeng/toast";
 import {ImageModule} from "primeng/image";
+import {SidebarModule} from "primeng/sidebar";
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HeaderComponent, NotFoundComponent],
@@ -32,6 +33,7 @@ import {ImageModule} from "primeng/image";
         MessageModule,
         ToastModule,
         ImageModule,
+        SidebarModule,
     ],
   providers: [
     httpInterceptorProviders,

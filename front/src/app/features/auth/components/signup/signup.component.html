@@ -4,12 +4,28 @@
   </div>
   <h2 class="m-0">Inscription</h2>
   <form class="signup-form mt-4" [formGroup]="signUpForm" (ngSubmit)="signup()">
+    <p-message class="p-fluid" severity="error" text="{{errorMessage}}" *ngIf="onError"></p-message>
+    <p-message class="p-fluid" severity="success" text="{{sucessMessage}}" *ngIf="isRegistred"></p-message>
     <label>Nom d'utilisateur</label>
     <input class="p-fluid mb-2" pInputText type="text" formControlName="username">
+    <div *ngIf="signUpForm.dirty">
+      <div *ngIf="(f.username.touched || submitted) && f.username.hasError('required')"><small class="p-error">Champ requis</small></div>
+      <div *ngIf="(f.username.touched || submitted) && f.username.hasError('minLength')"><small class="p-error">Le nom d'utilisateur doit avoir au moins 8 caractères</small></div>
+    </div>
     <label>Adresse e-mail</label>
     <input class="p-fluid mb-2" pInputText type="email" formControlName="email">
+    <div *ngIf="signUpForm.dirty">
+      <div *ngIf="(f.email.touched || submitted) && f.email.hasError('required')"><small class="p-error">Champ requis</small></div>
+      <div *ngIf="(f.email.touched || submitted) && f.email.hasError('email')"><small class="p-error">Adresse e-mail invalide</small></div>
+    </div>
     <label>Mot de passe</label>
     <input class="p-fluid mb-2" pInputText type="password" formControlName="password">
+    <div *ngIf="signUpForm.dirty">
+      <div *ngIf="(f.password.touched || submitted) && f.password.hasError('required')"><small class="p-error">Champ requis</small></div>
+      <div *ngIf="(f.password.touched || submitted) && f.password.hasError('invalidPassword')"><small class="p-error">Le mot de passe doit comporter au moins 8 caractères et contenir une majuscule, une minuscule, un chiffre et un caractere spécial</small></div>
+    </div>
+
+
     <div class="flex justify-content-center">
     <button class="mt-2 w-fit" label="S'inscrire" pButton color="primary" type="submit"></button>
     </div>

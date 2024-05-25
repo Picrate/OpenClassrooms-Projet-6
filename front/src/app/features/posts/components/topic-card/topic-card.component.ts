@@ -18,11 +18,8 @@ export class TopicCardComponent implements OnInit {
   }
 
   manageSubscription(topic: Topic) {
-      this.userService.manageTopicSubscription(topic).subscribe(response => {
-        console.log(response);
-      });
+      this.userService.manageTopicSubscription(topic).subscribe();
       this.toggleLabel();
-
   }
 
   toggleLabel() {

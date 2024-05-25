@@ -4,11 +4,13 @@
   </div>
   <h2 class="m-0">Se connecter</h2>
   <form class="signup-form mt-2" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
-    <p *ngIf="isLoginFailed" class="p-error">Erreur d'authentification</p>
+    <p-message class="p-fluid" severity="error" text="{{errorMessage}}" *ngIf="isLoginFailed"></p-message>
     <label class="mt-4">E-mail ou nom d'utilisateur</label>
     <input pInputText type="text" formControlName="login">
+    <small class="p-error" *ngIf="signinForm.dirty && f.login.hasError('required')">Champ requis</small>
     <label class="mt-4">Mot de passe</label>
     <input pInputText type="password" formControlName="password">
+    <small class="p-error" *ngIf="signinForm.dirty && f.password.hasError('required')">Champ requis</small>
     <div class="flex justify-content-center mt-4">
     <button pButton type="submit" label="Se connecter" [disabled]="!signinForm.valid" class="mt-2 w-fit"></button>
     </div>
