@@ -86,7 +86,13 @@ public class AuthController {
                     roles
             );
 
-            RefreshTokenDto refreshToken = refreshTokenService.generateRefreshTokenDto(userDetails.getId());
+            RefreshTokenDto refreshToken = null;
+            if(this.refreshTokenService.refreshTokenExistsForUserId(userDetails.getId()))
+            {
+                refreshToken = this.refreshTokenService.getRefreshTokenForUser(userDetails.getId());
+            } else {
+               refreshToken = this.refreshTokenService.generateRefreshTokenDto(userDetails.getId());
+            }
 
             /*
             ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.getToken());
@@ -190,7 +196,6 @@ public class AuthController {
                     .orElseThrow(() -> new TokenRefreshException(refreshRequest.getRefreshToken(),
                             "Je jeton n'est pas présent en base !"));
         }
-
         return ResponseEntity.badRequest().build();
         /*
         if((refreshToken != null)&&(!refreshToken.isEmpty())){

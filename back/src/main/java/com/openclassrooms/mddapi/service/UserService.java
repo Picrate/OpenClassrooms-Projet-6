@@ -56,6 +56,14 @@ public class UserService {
         }
     }
 
+    public SimpleUserDto getSimpleUSerDtoById(String userId){
+        Optional<User> user = this.userRepository.findById(userId);
+        if (user.isPresent()) {
+            return userMapper.userToSimpleDto(user.get());
+        }
+        return null;
+    }
+
     public void updateUser(UpdatedUserDto newUserInfos) {
         Optional<User> user = this.userRepository.findById(newUserInfos.getId());
         if (user.isPresent()) {

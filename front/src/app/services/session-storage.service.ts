@@ -23,11 +23,8 @@ export class SessionStorageService {
   }
 
   public saveUser(jwtResponse: JwtResponse): void {
-    console.log(jwtResponse);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(jwtResponse.user));
-    if(!this.hasRefreshTokenOnLocalStorage()){
-      this.setRefreshToken(jwtResponse.refreshToken);
-    }
+    this.setRefreshToken(jwtResponse.refreshToken);
     this.loggedIn.next(true);
   }
 
