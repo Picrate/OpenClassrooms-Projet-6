@@ -1,4 +1,4 @@
-import { UniqueUsernameOrEmailValidator } from './unique-username-or-email-validator';
+import {UniqueUsernameOrEmailValidator} from './unique-username-or-email-validator';
 
 describe('UniqueUsernameOrEmailValidator', () => {
   it('should create an instance', () => {

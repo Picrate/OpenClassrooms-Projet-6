@@ -1,9 +1,11 @@
 package com.openclassrooms.mddapi.mapper;
 
 import com.openclassrooms.mddapi.dto.*;
-import com.openclassrooms.mddapi.model.*;
+import com.openclassrooms.mddapi.model.Author;
+import com.openclassrooms.mddapi.model.Comment;
+import com.openclassrooms.mddapi.model.Post;
+import com.openclassrooms.mddapi.model.Topic;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

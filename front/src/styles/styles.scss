@@ -2,35 +2,37 @@
 
 $fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 $fontSize: 1rem;
-
+//Global configuration
 :root {--lh: 1.4rem;}
-
 html, body{
   line-height: var(--lh);
   height: 100vh;
   width: 100vw;
   margin: 0;
+  font-family: var(--font-family);
 }
-
+// Logo
 .logo {
   width: 60%;
 }
-
+// Cards Global configuration
 .pcard {
   margin: 2rem;
-  padding: 0;
+  padding: 2rem;
 }
-
 .p-card-content {
   padding: 0;
 }
-
 .p-card-body {
-  background-color: var(--surface-b);
+  background-color: var(--surface-c);
   min-height: 280px;
   max-height: 280px;
 }
-
+// Sidebar
+.p-sidebar-content {
+  height: 100%!important;
+}
+// Topic & Posts content truncate
 .truncate-overflow {
   --max-lines: 5;
   position: relative;

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, UrlSegment} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {SessionStorageService} from "../../services/session-storage.service";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";

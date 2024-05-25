@@ -1,4 +1,4 @@
-<div class="grid m-5">
+<div class="grid p-5">
   <div class="col-12 lg:col-6" *ngFor="let topic of topics$ | async">
     <app-topic-card [topic]="topic" [buttonLabel]="isTopicSubscribed(topic)"></app-topic-card>
   </div>

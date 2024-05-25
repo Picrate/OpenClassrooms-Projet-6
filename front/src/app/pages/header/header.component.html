@@ -1,4 +1,4 @@
-<div class="flex flex-row w-screen justify-content-between h-6rem" *ngIf="router.url !== '/'">
+<div class="flex flex-row w-full justify-content-between h-auto align-items-center" *ngIf="router.url !== '/'">
   <span class="flex flex-grow-0 align-items-center m-0" (click)="goToHome()">
       <div *ngIf="!xs || !router.url.includes('/auth'); else showArrow">
         <img height="80px" src="assets/logo_p6.png" />

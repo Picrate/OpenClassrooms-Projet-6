@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PostsApiService} from "../../services/posts-api.service";
 import {Observable} from "rxjs";
 import {Topic} from "../../interfaces/topic";

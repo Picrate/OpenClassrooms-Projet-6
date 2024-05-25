@@ -1,4 +1,4 @@
-import { SamePasswordValidator } from './same-password.validator';
+import {SamePasswordValidator} from './same-password.validator';
 
 describe('SamePasswordDirective', () => {
   it('should create an instance', () => {

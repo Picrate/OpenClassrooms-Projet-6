@@ -1,21 +1,22 @@
-<div class="grid">
-  <div class="col-12 text-center">
-    <h3>Créer un nouvel article</h3>
-  </div>
-  <div class="col-10 col-offset-1 lg:col-4 lg:col-offset-4 align-items-center">
-    <p-autoComplete
-      [(ngModel)]="topic"
-      [suggestions]="topics"
-      (completeMethod)="search($event)"
-      field="title"
-      [minLength]="1"
-      placeholder="Sélectionner un thème">
-    </p-autoComplete>
-  </div>
-<form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="col-10 col-offset-1 lg:col-4 lg:col-offset-4 align-items-center">
-  <input pInputText id="title" type="text" formControlName="title" placeholder="Titre de l'article" class="p-input-filled m-2 w-full">
-  <textarea pInputTextarea formControlName="content" class="m-2 w-full h-full" placeholder="Contenu de l'article"></textarea>
-  <div class="flex justify-content-center w-full"><button pButton type="submit" class="p-button-raised w-12rem">Créer</button></div>
-
+<div class="flex flex-column align-items-center align-items-stretch">
+<h3>Créer un nouvel article</h3>
+  <div *ngIf="responseMessage"><p-message [severity]="messageSeverity">{{responseMessage}}</p-message></div>
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="flex flex-column align-items-stretch">
+  <p-autoComplete
+    [(ngModel)]="topic"
+    [suggestions]="topics"
+    (completeMethod)="search($event)"
+    field="title"
+    [minLength]="1"
+    placeholder="Sélectionner un thème"
+    class="flex justify-content-center w-full m-2"
+    formControlName="topic"
+  ></p-autoComplete>
+  <small class="p-error" *ngIf="postForm.dirty && f.topic.hasError('required')">Champ requis</small>
+  <input pInputText id="title" type="text" formControlName="title" placeholder="Titre de l'article" class="p-input-filled m-2">
+  <small class="p-error" *ngIf="postForm.dirty && f.title.hasError('required')">Champ requis</small>
+  <textarea pInputTextarea rows="10" cols="30" formControlName="content" class="m-2" placeholder="Contenu de l'article"></textarea>
+  <small class="p-error" *ngIf="postForm.dirty && f.content.hasError('required')">Champ requis</small>
+  <div class="flex justify-content-center w-full"><button pButton type="submit" label="Créer" class="p-button-raised w-12rem" [disabled]="!postForm.valid"></button></div>
 </form>
 </div>

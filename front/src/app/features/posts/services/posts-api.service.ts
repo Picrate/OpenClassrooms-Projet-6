@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Post} from "../interfaces/post";
@@ -30,7 +30,7 @@ export class PostsApiService {
     return this.httpClient.get<Array<Post>>(`${this.postPathService}/topic`, options);
   }
 
-  public createNewPost(newPost: NewPostRequest): Observable<any> {
+  public createNewPost(newPost: NewPostRequest): Observable<ResponseMessage> {
     return this.httpClient.post<ResponseMessage>(`${this.postPathService}`, newPost);
   }
 

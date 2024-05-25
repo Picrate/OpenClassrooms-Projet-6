@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Post} from "../../interfaces/post";
-import {PostsApiService} from "../../services/posts-api.service";
 import {Router} from "@angular/router";
 
 @Component({

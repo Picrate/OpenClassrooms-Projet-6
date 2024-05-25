@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { SessionStorageService } from './session-storage.service';
+import {SessionStorageService} from './session-storage.service';
 
 describe('StorageService', () => {
   let service: SessionStorageService;

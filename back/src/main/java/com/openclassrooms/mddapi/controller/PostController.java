@@ -18,8 +18,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,16 +38,12 @@ public class PostController {
 
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> createPost(@RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
+    public ResponseEntity<MessageResponse> createPost(@RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         SimpleUserDto author = this.userService.getSimpleUserDtoByEmailOrUsername(currentPrincipalName);
         String newPostId = this.postService.createNewPost(postDto, author);
-        URI locationOfRelatedPost = ucb
-                .path("/api/posts/{id}")
-                .buildAndExpand(newPostId)
-                .toUri();
-        return ResponseEntity.created(locationOfRelatedPost).build();
+        return ResponseEntity.ok(new MessageResponse(newPostId));
     }
 
     @GetMapping("/{id}")

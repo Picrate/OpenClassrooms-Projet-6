@@ -3,9 +3,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {SignUpRequest} from "../../interfaces/sign-up-request";
-import {SessionStorageService} from "../../../../services/session-storage.service";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {UniqueUsernameOrEmailValidator} from "../../../users/validators/unique-username-or-email-validator";
 import {UsersService} from "../../../users/services/users.service";
 import {passwordValidator} from "../../../users/validators/password-validator";
 

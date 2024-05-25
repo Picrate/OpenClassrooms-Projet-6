@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TopicListComponent } from './topic-list.component';
+import {TopicListComponent} from './topic-list.component';
 
 describe('TopicListComponent', () => {
   let component: TopicListComponent;

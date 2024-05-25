@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { MeComponent } from './components/me/me.component';
-import { FeedComponent } from './components/feed/feed.component';
+import {NgModule} from '@angular/core';
+import {MeComponent} from './components/me/me.component';
+import {FeedComponent} from './components/feed/feed.component';
 import {UsersRoutingModule} from "./users-routing.module";
 import {CommonModule, DatePipe, NgIf} from "@angular/common";
 import {PostsModule} from "../posts/posts.module";

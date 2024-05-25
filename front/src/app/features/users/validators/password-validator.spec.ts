@@ -1,4 +1,4 @@
-import { PasswordValidator } from './password-validator';
+import {PasswordValidator} from './password-validator';
 
 describe('PasswordValidator', () => {
   it('should create an instance', () => {
