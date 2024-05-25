@@ -3,6 +3,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {SignInRequest} from "../interfaces/sign-in-request";
 import {SignUpRequest} from "../interfaces/sign-up-request";
+import {JwtResponse} from "../../../interfaces/jwt-response";
+import {TokenRefreshRequest} from "../../../interfaces/token-refresh-request";
 
 const httpOptions = {
   headers : new HttpHeaders({'Content-Type':'application/json'})
@@ -20,12 +22,20 @@ export class AuthService {
     return this.httpClient.post(API_AUTH+'/register', registerRequest, httpOptions);
   }
 
-  public login(loginRequest: SignInRequest): Observable<any> {
-    return this.httpClient.post(API_AUTH+'/login', loginRequest, httpOptions);
+  public autologin(): void{
+
+  }
+
+  public login(loginRequest: SignInRequest): Observable<JwtResponse> {
+    return this.httpClient.post<JwtResponse>(API_AUTH+'/login', loginRequest, httpOptions);
   }
 
   public logout(){
     return this.httpClient.get(API_AUTH+'/logout');
+  }
+
+  public refreshToken(tokenRefreshRequest: TokenRefreshRequest): Observable<JwtResponse>{
+    return this.httpClient.post<JwtResponse>(API_AUTH+'/refreshtoken', tokenRefreshRequest, httpOptions);
   }
 
 }
