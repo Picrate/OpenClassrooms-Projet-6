@@ -1,27 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {SessionService} from "../../../../services/session.service";
-import {SignInRequest} from "../../interfaces/sign-in-request";
-import {SessionInformation} from "../../../../interfaces/session-information";
 import {SignUpRequest} from "../../interfaces/sign-up-request";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {UsersService} from "../../../users/services/users.service";
+import {passwordValidator} from "../../../users/validators/password-validator";
+
+const PASSWORD_VALIDATOR_PATTERN = '/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\S*([^\\w\\s]|[_]))\\S{8,}$/g';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent {
-  public hide = true;
-  public onError = false;
+export class SignupComponent  implements OnInit{
+
+  onError = false;
+  errorMessage = '';
+  sucessMessage = "Inscription réussie";
+  submitted= false;
+  hideLogo = false;
+  isRegistred: boolean = false;
 
   signUpForm = this.fb.group({
     username: [
       '',
       [
         Validators.required,
-        Validators.min(3)
+        Validators.min(8)
       ]
     ],
     email: [
@@ -35,20 +42,47 @@ export class SignupComponent {
       '',
       [
         Validators.required,
-        Validators.min(8),
-        Validators.pattern('/^(?=\\S*[a-z])(?=\\S*[A-Z])(?=\\S*\\d)(?=\\S*([^\\w\\s]|[_]))\\S{8,}$/g')
+        passwordValidator
       ]
     ]
   })
 
-  constructor(private authService: AuthService, private routeur: Router, private fb: FormBuilder, private sessionService: SessionService) {
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService,
+    private fb: FormBuilder,
+    private router: Router,
+    private responsive: BreakpointObserver
+    ) {
+  }
+
+  ngOnInit(): void {
+    this.responsive.observe([
+      Breakpoints.XSmall,
+    ]).subscribe(result => {
+      this.hideLogo = true;
+      if(result.matches){
+        this.hideLogo = false;
+      }
+    })
   }
 
   signup() {
     const signUpRequest: SignUpRequest = this.signUpForm.value as SignUpRequest;
-    this.authService.register(signUpRequest).subscribe((response) =>  {
+    console.log(signUpRequest);
+    this.authService.register(signUpRequest).subscribe({
+      next: value => {
+        this.isRegistred = true;
+        this.router.navigate(['']);
+      },
+      error: err => {
+        this.onError = true;
+        this.errorMessage = err.error.message;
+      }
+    });
+  }
 
-
-
-    })  }
+  get f(){
+    return this.signUpForm.controls;
+  }
 }

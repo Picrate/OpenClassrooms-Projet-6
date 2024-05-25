@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {SessionService} from "../../services/session.service";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {SessionStorageService} from "../../services/session-storage.service";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-header',
@@ -9,21 +11,45 @@ import {SessionService} from "../../services/session.service";
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private router: Router, private sessionService: SessionService) { }
+  isLoggedIn$ ?: Observable<boolean>;
+  xs = false;
+  display: boolean = false;
+
+  constructor(
+    private storageService: SessionStorageService,
+    protected router: Router,
+    private responsive: BreakpointObserver,
+    private activatedRoute : ActivatedRoute
+    ) { }
 
   ngOnInit(): void {
+    this.isLoggedIn$ = this.storageService.isLoggedIn();
+    this.responsive.observe([
+      Breakpoints.XSmall,
+    ]).subscribe(result => {
+      this.xs = result.matches;
+    })
   }
 
   goToHome() {
-    this.router.navigate(['/home']);
+    if(this.display){
+      this.display = false;
+    }
+    this.router.navigate(['/users/feed']);
+  }
+
+  goTopics() {
+    if(this.display){
+      this.display = false;
+    }
+    this.router.navigate(['/posts/topics']);
   }
 
   myProfile() {
+    if(this.display){
+      this.display = false;
+    }
     this.router.navigate(['/users/me']);
   }
 
-  logout() {
-    this.sessionService.logOut();
-    this.router.navigate(['']);
-  }
 }

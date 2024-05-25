@@ -16,7 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +36,9 @@ public class UserController {
 
     @GetMapping("/get")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<SimpleUserDto> getUserByEmail(@RequestParam @Email String email){
-        if(this.userService.existsByEmail(email)){
-            return ResponseEntity.ok(this.userService.getSimpleUserDtoByEmail(email));
+    public ResponseEntity<SimpleUserDto> getUserByEmail(@RequestParam String login){
+        if(this.userService.existsByEmailOrUsername(login)){
+            return ResponseEntity.ok(this.userService.getSimpleUserDtoByEmailOrUsername(login));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -49,7 +48,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserDto> getUserProfile(){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
-        UserDto dto = userService.getUserDtoByEmail(currentPrincipalName);
+        UserDto dto = userService.getUserDtoByEmailOrUsername(currentPrincipalName);
         if(dto == null){
             return ResponseEntity.notFound().build();
         }else
@@ -60,14 +59,14 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MessageResponse> updateMyProfile(@Valid @RequestBody UpdatedUserDto updatedUserDto){
         String currentPrincipalName = getCurrentPrincipalName(SecurityContextHolder.getContext());
-        UserDto currentUser = userService.getUserDtoByEmail(currentPrincipalName);
+        UserDto currentUser = userService.getUserDtoByEmailOrUsername(currentPrincipalName);
         if(currentUser == null){
             return ResponseEntity.notFound().build();
         } else if(updatedUserDto.getId().equals(currentUser.getId())){
             this.userService.updateUser(updatedUserDto);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.unprocessableEntity().body(new MessageResponse("Email already used."));
+            return ResponseEntity.unprocessableEntity().body(new MessageResponse("Can't update account"));
         }
     }
 
@@ -105,6 +104,12 @@ public class UserController {
         return ResponseEntity.ok(posts);
     }
 
+    @PostMapping("/exists")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MessageResponse> isUserExists(@RequestBody @Valid UserExistsRequestDto userDto){
+        boolean response = this.userService.existsByEmailOrUsername(userDto.getUsernameOrEmail());
+        return ResponseEntity.ok(new MessageResponse(String.valueOf(response)));
+    }
 
     private String getCurrentPrincipalName(SecurityContext securityContext){
         Authentication authentication = securityContext.getAuthentication();

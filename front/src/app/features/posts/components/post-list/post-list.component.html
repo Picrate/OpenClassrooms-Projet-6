@@ -1,2 +1,5 @@
-<app-post *ngFor="let post of (posts$ | async)"></app-post>
+<div id="post-list" class="grid mt-2">
+    <app-post-card [post]="post" *ngFor="let post of postList | async" class="col-12 lg:col-6"></app-post-card>
+</div>
+
 

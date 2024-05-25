@@ -23,8 +23,8 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private Author author;
-    private String topic;
+    private SimpleUserDto author;
+    private Topic topic;
     private List<Comment> comments;
     @Field("created_at")
     private LocalDateTime createdAt;

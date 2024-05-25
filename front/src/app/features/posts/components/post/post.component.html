@@ -1,25 +1,31 @@
-<div class="post">
-
-  <div class="post-header">
-    <div class="post-title"><button mat-button (click)="goBack()"><mat-icon fontIcon="arrow_back"></mat-icon></button><h2>{{post.title}}</h2></div>
-    <div class="post-infos"><p>Date: {{post.created_at | date: "longDate"}}</p><p>Auteur: {{post.author.username}}</p><p>Thème: {{post.topic}}</p></div>
+<div class="flex flex-column w-full p-2 m-0">
+  <div id="post-header" class="flex justify-content-start">
+    <button pButton (click)="goBack()" icon="pi pi-arrow-left" class="p-button-icon-left p-button-secondary p-button-text"></button>
+    <h2>{{post.title}}</h2>
   </div>
-  <div class="post-content">
-    <p>{{post.content}}</p>
-    <div class="comments">
-      <p>Commentaires</p>
-      <div class="comment" *ngFor="let comment of post.comments">
-        <p>{{comment.author}}</p>
-        <p>{{comment.content}}</p>
-      </div>
+  <div *ngIf="onError"><p-message class="p-fluid" severity="error" text="{{errorMessage}}"></p-message></div>
+  <div id="post-content" class="flex flex-column w-full ml-2 lg:ml-5 lg:mr-auto">
+    <div id="post-infos" class="grid align-items-stretch">
+      <p class="col-12 lg:col-2 mb-1 mt-0">Date: {{post.createdAt | date:'dd/MM/YYYY'}}</p>
+      <p class="col-12 lg:col-2 mb-1 mt-0">Auteur: {{post.author.username}}</p>
+      <p class="col-12 lg:col-2 mb-1 mt-0">Thème: {{post.topic.title}}</p>
     </div>
-    <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="postComment()">
-      <mat-form-field>
-        <textarea matNativeControl formControlName="comment" placeholder="Ecrivez votre commentaire ici"></textarea>
-      </mat-form-field>
-      <button type="submit">
-        <mat-icon fontIcon="send"></mat-icon>
-      </button>
-    </form>
+    <p>{{post.content}}</p>
+    <p-divider></p-divider>
+    <h3 class="mt-0">Commentaires</h3>
+    <div class="grid">
+      <div id="post-comments" class="col-12 lg:col-10 lg:col-offset-1">
+        <div *ngFor="let comment of post.comments; index as index" id="post-comment-{{index}}" class="flex flex-wrap">
+          <p class="mb-0">{{comment.author.username}}</p>
+          <p class="comment-content mt-1 mb-0">{{comment.content}}</p>
+        </div>
+      </div>
+      <form id="new-comment-form" class="col-12" [formGroup]="commentForm" (ngSubmit)="postComment()">
+        <div class="flex">
+          <textarea pInputTextarea formControlName="comment" placeholder="Ecrivez votre commentaire ici" class="w-full"></textarea>
+          <button pButton type="submit" class="p-button p-button-text"><i class="pi pi-send" style="font-size: 2rem"></i></button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

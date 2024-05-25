@@ -12,6 +12,7 @@ import com.openclassrooms.mddapi.model.Topic;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.RoleRepository;
 import com.openclassrooms.mddapi.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -37,38 +39,51 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public UserDto getUserDtoByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public UserDto getUserDtoByEmailOrUsername(String login) {
+        Optional<User> user = userRepository.findByEmailOrUsername(login, login);
         if (user.isPresent()) {
             return userMapper.userToDto(user.get());
         } else
             return null;
     }
 
-    public SimpleUserDto getSimpleUserDtoByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public SimpleUserDto getSimpleUserDtoByEmailOrUsername(String login) {
+        Optional<User> user = userRepository.findByEmailOrUsername(login, login);
         if (user.isPresent()) {
-            return userMapper.userToSimpleUser(user.get());
+            return userMapper.userToSimpleDto(user.get());
         } else {
             return null;
         }
     }
 
-    public void updateUser(UpdatedUserDto currentUser) {
-        Optional<User> user = this.userRepository.findByEmail(currentUser.getEmail());
+    public SimpleUserDto getSimpleUSerDtoById(String userId){
+        Optional<User> user = this.userRepository.findById(userId);
+        if (user.isPresent()) {
+            return userMapper.userToSimpleDto(user.get());
+        }
+        return null;
+    }
+
+    public void updateUser(UpdatedUserDto newUserInfos) {
+        Optional<User> user = this.userRepository.findById(newUserInfos.getId());
         if (user.isPresent()) {
             User userToUpdate = user.get();
-            userToUpdate.setEmail(currentUser.getEmail());
-            userToUpdate.setUsername(currentUser.getUsername());
-            userToUpdate.setPassword(passwordEncoder.encode(currentUser.getPassword()));
+            if(newUserInfos.getPassword() != null) {
+                userToUpdate.setPassword(passwordEncoder.encode(newUserInfos.getPassword()));
+            }
+            if(newUserInfos.getEmail() != null) {
+                userToUpdate.setEmail(newUserInfos.getEmail());
+            }
+            if(newUserInfos.getUsername() != null) {
+                userToUpdate.setUsername(newUserInfos.getUsername());
+            }
             userToUpdate.setUpdatedAt(LocalDateTime.now());
-            userToUpdate.setTopics(topicMapper.topicDtoToTopicList(currentUser.getTopics()));
             userRepository.save(userToUpdate);
         }
     }
 
-    public List<TopicDto> getUserTopics(String email){
-        Optional<User> opt = this.userRepository.findByEmail(email);
+    public List<TopicDto> getUserTopics(String login){
+        Optional<User> opt = this.userRepository.findByEmailOrUsername(login, login);
         if (opt.isPresent()) {
             return topicMapper.topicListToTopicDtoList(opt.get().getTopics());
         } else {
@@ -76,15 +91,30 @@ public class UserService {
         }
     }
 
-    public Boolean updateTopics(TopicDto topicDto, String email) {
-        Optional<User> opt = this.userRepository.findByEmail(email);
+    public List<String> getUserRoles(String login){
+        List<String> roles = new ArrayList<String>();
+        Optional<User> opt = this.userRepository.findByEmailOrUsername(login, login);
+        if (opt.isPresent()) {
+            User user = opt.get();
+            for (Role role : user.getRoles()) {
+                roles.add(role.getName().name());
+            }
+        }
+        return roles;
+    }
+
+    public Boolean updateTopics(TopicDto topicDto, String login) {
+        Optional<User> opt = this.userRepository.findByEmailOrUsername(login, login);
         Topic topicToUpdate = topicMapper.topicDtoToTopic(topicDto);
         if (opt.isPresent()) {
             User user = opt.get();
-            if (!user.getTopics().contains(topicToUpdate)) {
-                user.getTopics().add(topicToUpdate);
+            List<Topic> userTopics = user.getTopics();
+            if (!userTopics.contains(topicToUpdate)) {
+                userTopics.add(topicToUpdate);
+                user.setTopics(userTopics);
             } else {
-                user.getTopics().remove(topicToUpdate);
+                userTopics.remove(topicToUpdate);
+                user.setTopics(userTopics);
             }
             this.userRepository.save(user);
             return true;
@@ -100,6 +130,8 @@ public class UserService {
     public boolean existsByUsername(String username) {
         return this.userRepository.existsByUsername(username);
     }
+
+    public boolean existsByEmailOrUsername(String login) {return this.userRepository.existsByEmailOrUsername(login, login);}
 
     public Optional<Role> getRole(ERole role){
         return roleRepository.findByName(role);

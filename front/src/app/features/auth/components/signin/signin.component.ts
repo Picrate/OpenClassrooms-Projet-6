@@ -1,54 +1,71 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {SignInRequest} from "../../interfaces/sign-in-request";
-import {FormBuilder, Validators} from "@angular/forms";
-import {SessionService} from "../../../../services/session.service";
-import {SessionInformation} from "../../../../interfaces/session-information";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {SessionStorageService} from "../../../../services/session-storage.service";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss'],
 })
+export class SigninComponent implements OnInit{
 
-export class SigninComponent {
+  hideLogo: boolean = false;
 
-  public hide = true;
-  public onError = false;
+  signinForm = new FormGroup(
+    {
+      login: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required])
+    }
+  );
 
-  signInForm = this.fb.group({
-    email: [
-      '',
-      [
-        Validators.required,
-        Validators.email
-      ]
-    ],
-    password: [
-      '',
-      [
-        Validators.required,
-        Validators.min(3)
-      ]
-    ]
-  })
+  isLogged = false;
+  isLoginFailed = false;
+  errorMessage ='';
+  roles: string[] | undefined = [];
 
-  constructor(private authService: AuthService, private routeur: Router, private fb: FormBuilder, private sessionService: SessionService) {
+  constructor(
+    private authService: AuthService,
+    private storageService: SessionStorageService,
+    private router: Router,
+    private responsive: BreakpointObserver
+    ) {
+
   }
 
-  signin() {
+  ngOnInit(): void {
 
-    const formValues = this.signInForm.value;
+    this.responsive.observe([
+      Breakpoints.XSmall,
+    ]).subscribe(result => {
+      this.hideLogo = !result.matches;
+    })
 
-    if(formValues.email && formValues.password) {
-      const signInRequest: SignInRequest = formValues as SignInRequest;
-      this.authService.login(signInRequest).subscribe({
-        next: (resp : SessionInformation) => {
-          this.sessionService.logIn(resp);
-          this.routeur.navigate(['/users/feed']);
-        }
-      });
+    if(this.storageService.isLoggedIn()){
+      this.isLogged = true;
+      this.roles = this.storageService.getUser()?.roles;
     }
+  }
+
+  get f(){
+    return this.signinForm.controls;
+  }
+
+  onSubmit(){
+    const signinRequest = this.signinForm.value as SignInRequest;
+    this.authService.login(signinRequest).subscribe({
+      next: value => {
+        this.storageService.saveUser(value);
+        this.router.navigate(['/users/feed']);
+      },
+      error: err => {
+        this.isLoginFailed = true;
+        this.errorMessage = err.error.message;
+        }
+    });
+
   }
 }

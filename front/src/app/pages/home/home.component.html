@@ -1,5 +1,7 @@
-<div class="center">
-  <img src="/assets/logo_p6.png" alt="logo" />
-  <h1>Welcome to MDD</h1>
-  <button mat-raised-button color="primary" (click)="start()">Commencer</button>
+<div class="flex flex-column justify-content-center align-items-center">
+  <img class="logo" src="/assets/logo_p6.png" alt="logo"/>
+  <div class="flex flex-wrap justify-content-center">
+    <button pButton label="Se connecter" class="p-button-outlined p-button-secondary w-12rem m-2" (click)="login()"></button>
+    <button pButton label="S'incrire" class="p-button-outlined p-button-secondary w-12rem m-2" (click)="signin()"></button>
+  </div>
 </div>

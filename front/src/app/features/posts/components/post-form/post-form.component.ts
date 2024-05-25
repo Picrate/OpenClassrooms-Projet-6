@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Topic} from "../../interfaces/topic";
 import {PostsApiService} from "../../services/posts-api.service";
-import {map, Observable, startWith} from "rxjs";
+import {NewPostRequest} from "../../interfaces/new-post-request";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-post-form',
@@ -12,33 +13,51 @@ import {map, Observable, startWith} from "rxjs";
 export class PostFormComponent implements OnInit {
 
   topics!: Topic[];
-  filteredTopics: Observable<Topic[]> | undefined;
+  topic?: Topic;
+  messageSeverity: string = 'success';
+  responseMessage: string ='';
+  onMessage: boolean = false;
 
-  topicForm = new FormGroup({
-    topic : new FormControl<string | Topic>(''),
-    title : new FormControl(''),
-    content : new FormControl('')
+  postForm = new FormGroup({
+    topic : new FormControl('', Validators.required),
+    title : new FormControl('', Validators.required),
+    content : new FormControl('', Validators.required)
   });
 
-  constructor(private postApiService: PostsApiService) {}
-
-  ngOnInit(): void {
-    this.postApiService.getTopics().subscribe(topics => this.topics = topics);
-    this.filteredTopics = this.topicForm.get('topic')?.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const title = typeof value === 'string' ? value : value?.title;
-        return title ? this._filter(title as string):this.topics.slice();
-      })
-    )
+  get f(){
+    return this.postForm.controls;
   }
 
-  private _filter(name: string): Topic[] {
-    const filterValue = name.toLowerCase();
-    return this.topics.filter(topic => topic.title.toLowerCase().includes(filterValue));
-  }
+  constructor(private postApiService: PostsApiService, private router: Router) {}
+
+  ngOnInit(): void {}
+
+  // TODO Traiter le retour
 
   onSubmit() {
-  console.log(this.topics);
+    const newPost: NewPostRequest = {
+      title: this.postForm.value.title,
+      content: this.postForm.value.content,
+      topic: this.topic
+    }
+    this.postApiService.createNewPost(newPost).subscribe(response => {
+      this.onMessage = true;
+      this.messageSeverity = 'success';
+      this.responseMessage = 'Article Enregistré';
+      this.router.navigate(['/posts/'+response.message]);
+
+    }, error => {
+      this.onMessage = true;
+      this.messageSeverity = 'error'
+      this.responseMessage = error.errorMessage;
+    });
+  }
+
+  search($event: any) {
+   this.postApiService.getTopicsByTitle($event.query).subscribe( {
+     next: value => {
+       this.topics = value;
+     }
+   });
   }
 }

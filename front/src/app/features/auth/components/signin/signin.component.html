@@ -1,21 +1,18 @@
-<div id="signin">
-  <div class="logo">
-    <img src="assets/logo_p6.png">
+<div id="signup">
+  <div *ngIf="!hideLogo" class="flex justify-content-center">
+    <img class="logo" src="assets/logo_p6.png"/>
   </div>
-  <form class="signin-form" [formGroup]="signInForm" (ngSubmit)="signin()">
-    <mat-form-field>
-      <mat-label>
-        Email:
-      </mat-label>
-      <input matNativeControl type="email" formControlName="email">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>
-        Mot de passe:
-      </mat-label>
-        <input matNativeControl type="password" formControlName="password">
-
-    </mat-form-field>
-    <button mat-flat-button color="primary" type="submit">Se connecter</button>
+  <h2 class="m-0">Se connecter</h2>
+  <form class="signup-form mt-2" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+    <p-message class="p-fluid" severity="error" text="{{errorMessage}}" *ngIf="isLoginFailed"></p-message>
+    <label class="mt-4">E-mail ou nom d'utilisateur</label>
+    <input pInputText type="text" formControlName="login">
+    <small class="p-error" *ngIf="signinForm.dirty && f.login.hasError('required')">Champ requis</small>
+    <label class="mt-4">Mot de passe</label>
+    <input pInputText type="password" formControlName="password">
+    <small class="p-error" *ngIf="signinForm.dirty && f.password.hasError('required')">Champ requis</small>
+    <div class="flex justify-content-center mt-4">
+    <button pButton type="submit" label="Se connecter" [disabled]="!signinForm.valid" class="mt-2 w-fit"></button>
+    </div>
   </form>
 </div>

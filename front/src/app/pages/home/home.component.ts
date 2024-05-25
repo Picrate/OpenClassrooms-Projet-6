@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
+import {SessionStorageService} from "../../services/session-storage.service";
+import {AuthService} from "../../features/auth/services/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -6,11 +9,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router, private sessionStorage: SessionStorageService, private authService: AuthService) {}
 
   ngOnInit(): void {}
 
-  start() {
-    alert('Commencez par lire le README et à vous de jouer !');
+  login() {
+    this.router.navigate(['/auth/signin']);
+  }
+
+  signin() {
+    this.router.navigate(['/auth/signup']);
   }
 }

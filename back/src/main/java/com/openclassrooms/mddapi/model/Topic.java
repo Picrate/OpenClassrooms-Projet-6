@@ -1,11 +1,18 @@
 package com.openclassrooms.mddapi.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
+import javax.validation.constraints.NotBlank;
+
+@Data
+@Document(collection = "topics")
 public class Topic {
-    public String title;
-    public String description;
+    @Id
+    private String id;
+    @NotBlank
+    private String title;
+    @NotBlank
+    private String description;
 }

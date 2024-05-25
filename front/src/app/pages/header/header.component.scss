@@ -1,12 +1,13 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-  border: 1px solid black;
-  .logo img{
-    height: 15vh;
+a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  &:hover {
+    background-color: var(--surface-100);
+    border-radius: 0.5rem;
   }
-  mat-nav-list.list-horizontal {
-    display: flex;
-    flex-direction: row;
-  }
+}
+
+.active {
+  color: var(--primary-color);
+  text-decoration: none;
 }

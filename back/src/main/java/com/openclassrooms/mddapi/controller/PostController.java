@@ -7,6 +7,7 @@ import com.openclassrooms.mddapi.dto.TopicDto;
 import com.openclassrooms.mddapi.payload.response.MessageResponse;
 import com.openclassrooms.mddapi.service.PostService;
 import com.openclassrooms.mddapi.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,12 +18,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/posts")
 @CrossOrigin(origins = "http://localhost:4002", maxAge = 3600, allowCredentials="true")
@@ -38,20 +38,12 @@ public class PostController {
 
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<MessageResponse> createPost(@Valid @RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
+    public ResponseEntity<MessageResponse> createPost(@RequestBody SimplePostDto postDto, UriComponentsBuilder ucb) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        SimpleUserDto author = this.userService.getSimpleUserDtoByEmail(currentPrincipalName);
-        if(author == null) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new MessageResponse("Author not found"));
-        } else {
-            String newPostId = this.postService.createNewPost(postDto, author);
-            URI locationOfRelatedPost = ucb
-                    .path("/api/posts/{id}")
-                    .buildAndExpand(newPostId)
-                    .toUri();
-            return ResponseEntity.created(locationOfRelatedPost).build();
-        }
+        SimpleUserDto author = this.userService.getSimpleUserDtoByEmailOrUsername(currentPrincipalName);
+        String newPostId = this.postService.createNewPost(postDto, author);
+        return ResponseEntity.ok(new MessageResponse(newPostId));
     }
 
     @GetMapping("/{id}")
@@ -66,6 +58,7 @@ public class PostController {
     }
 
     @GetMapping("/topic")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<PostDto>> getPostsByTopic(@RequestParam String topic) {
         if(topic == null || topic.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -78,10 +71,18 @@ public class PostController {
 
     @GetMapping("/topics")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<TopicDto>> getAllTopics() {
-        List<TopicDto> topics = this.postService.getAllTopics();
+    public ResponseEntity<List<TopicDto>> getTopicsByTitle(@RequestParam String title) {
+        if(title == null || title.isEmpty()) {
+            List<TopicDto> topics = this.postService.getAllTopics();
+            if(topics == null) {
+                return ResponseEntity.internalServerError().build();
+            } else {
+                return ResponseEntity.ok(topics);
+            }
+        }
+        List<TopicDto> topics = this.postService.getTopicByTitleContainingIgnoreCase(title);
         if(topics == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(topics);
         }

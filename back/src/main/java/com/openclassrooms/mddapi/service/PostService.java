@@ -7,6 +7,7 @@ import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.Post;
 import com.openclassrooms.mddapi.model.Topic;
 import com.openclassrooms.mddapi.repository.PostRepository;
+import com.openclassrooms.mddapi.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final TopicRepository topicRepository;
 
     @Autowired
     PostMapper postMapper;
@@ -29,8 +31,9 @@ public class PostService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, TopicRepository topicRepository) {
         this.postRepository = postRepository;
+        this.topicRepository = topicRepository;
     }
 
     public PostDto getPostDtoById(String id){
@@ -52,11 +55,11 @@ public class PostService {
     }
 
     public String addCommentToPost(SimpleUserDto user, PostCommentDto postCommentDto){
-        String postId = postCommentDto.getPost_id();
+        String postId = postCommentDto.getPostId();
         Optional<Post> post = postRepository.findById(postId);
         if(post.isPresent()) {
             Post postObj = post.get();
-            Comment comment = new Comment(postMapper.simpleUserDtoToAuthor(user), postCommentDto.getComment());
+            Comment comment = new Comment(user, postCommentDto.getComment());
             postObj.addComment(comment);
             postRepository.save(postObj);
             return postObj.getId();
@@ -67,7 +70,7 @@ public class PostService {
 
     public String createNewPost(SimplePostDto postDto, SimpleUserDto author) {
         Post newPost = postMapper.simplePostDtoToPost(postDto);
-        newPost.setAuthor(postMapper.simpleUserDtoToAuthor(author));
+        newPost.setAuthor(author);
         this.postRepository.save(newPost);
         return newPost.getId();
     }
@@ -82,9 +85,10 @@ public class PostService {
         if(topics.isEmpty()) {
             return new ArrayList<>();
         } else {
+            List<Topic> topicList = topicMapper.topicDtoToTopicList(topics);
             Criteria orCriteria = new Criteria();
             List<Criteria> topicsCriterias = new ArrayList<>();
-            for(TopicDto topic : topics){
+            for(Topic topic : topicList){
                 Criteria criteria = Criteria.where("topic").is(topic);
                 topicsCriterias.add(criteria);
             }
@@ -95,10 +99,12 @@ public class PostService {
     }
 
     public List<TopicDto> getAllTopics(){
-        List<Topic> topics = this.mongoTemplate.query(Post.class)
-                .distinct("topic")
-                .as(Topic.class)
-                .all();
+        List<Topic> topics = this.topicRepository.getAllByOrderByTitleAsc();
+        return topicMapper.topicListToTopicDtoList(topics);
+    }
+
+    public List<TopicDto> getTopicByTitleContainingIgnoreCase(String text){
+        List<Topic> topics = this.topicRepository.getTopicByTitleContainingIgnoreCase(text);
         return topicMapper.topicListToTopicDtoList(topics);
     }
 

@@ -2,8 +2,12 @@ package com.openclassrooms.mddapi.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 public class PostCommentDto {
-    private String post_id;
+    @NotBlank
+    private String postId;
+    @NotBlank
     private String comment;
 }

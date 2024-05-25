@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {PostsApiService} from "../../services/posts-api.service";
 import {Post} from "../../interfaces/post";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-post-list',
@@ -9,12 +9,12 @@ import {Post} from "../../interfaces/post";
 })
 export class PostListComponent implements OnInit {
 
-  public posts$ = this.postService.getByTopic('topic');
-  @Input() postList$!: Array<Post> | undefined;
+  @Input() postList!: Observable<Post[]>;
 
-  constructor(private postService: PostsApiService) { }
+  constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

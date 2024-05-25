@@ -1,31 +1,35 @@
-<div class="my-profile">
-    <div class="user_infos">
-        <h2>Profil Utilisateur</h2>
-        <form action="">
-          <mat-form-field appearance="outline">
-            <input matNativeControl type="text" placeholder="Username">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <input matNativeControl type="email" placeholder="email@email.fr">
-          </mat-form-field>
-          <button mat-flat-button color="primary" type="submit">Sauvegarder</button>
-          <a href="#" (click)="logOut()">Se déconnecter</a>
-        </form>
-    </div>
-  <div class="subscriptions">
-    <h3>Abonnements</h3>
-    <div class="topics" *ngIf="user.topics.length > 0">
-      <mat-card *ngFor="let topic of user.topics">
-        <mat-card-header>
-          <mat-card-title>{{topic}}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          Description
-        </mat-card-content>
-        <mat-card-footer>
-          <button mat-flat-button color="primary" (click)="unsubscribe(topic)">Se désabonner</button>
-        </mat-card-footer>
-      </mat-card>
+<div class="grid">
+  <div class="col-12 lg:col-offset-5 lg:col-2 text-center">
+      <h2>Profil Utilisateur</h2>
+      <form class="flex flex-column align-items-center" [formGroup]="userForm" (ngSubmit)="updateProfile()">
+        <input id="username" formControlName="username"  pInputText type="text" placeholder="Username" class="p-input-filled p-fluid m-1">
+        <div *ngIf="userForm.dirty && f['username']?.touched">
+        <div *ngIf="(f['username']?.touched || submitted)&&(f['username']?.hasError('minLength'))"><small class="p-error">Le nom d'utilisateur doit être de 8 caracteres min.</small></div>
+        <div *ngIf="(f['username']?.touched || submitted)&&(f['username']?.hasError('alreadyExists'))"><small class="p-error">Nom d'utilisateur déjà utilisé</small></div>
+        </div>
+        <input id="email" formControlName="email" pInputText type="email" placeholder="email@email.fr" class="p-input-filled p-fluid m-1">
+        <div *ngIf="userForm.dirty && f['email']?.touched">
+        <div *ngIf="(f['email']?.touched || submitted)&&(f['email']?.hasError('email'))"><small class="p-error">Email invalide</small></div>
+        <div *ngIf="(f['email']?.touched || submitted)&&(f['email']?.hasError('alreadyExists'))"><small class="p-error">email déjà utilisé</small></div>
+        </div>
+        <input id="password" formControlName="password" pInputText type="password" placeholder="Nouveau mot de passe" class="p-input-filled p-fluid m-1">
+        <input id="password2" formControlName="password2" pInputText type="password" placeholder="Confirmation" class="p-input-filled p-fluid m-1">
+        <div *ngIf="userForm.dirty">
+        <div *ngIf="(f['password2']?.touched || submitted) && userForm.hasError('passwordDiffers')"><small class="p-error">Les Mots de passe ne sont pas identiques</small></div>
+        <div *ngIf="(f['password']?.touched || submitted) && f['password'].hasError('invalidPassword')"><small class="p-error">Le mot de passe doit comporter au moins 8 caractères et contenir une majuscule, une minuscule, un chiffre et un caractere spécial</small></div>
+        </div>
+        <button pButton type="submit" class="p-button-raised w-fit m-1" label="Mettre à jour" [disabled]="userForm.pristine"></button>
+        <button pButton type="button" class="p-button-link w-fit m-1" label="Se déconnecter" (click)="logOut()"></button>
+      </form>
+  </div>
+  <div class="col-12"><p-divider></p-divider></div>
+  <div class="col-12">
+    <div class="text-center"><h2>Abonnements</h2></div>
+    <div class="grid p-5">
+      <div class="col-12 lg:col-6" *ngFor="let topic of topics$ | async">
+        <app-topic-card [topic]="topic" [buttonLabel]="buttonLabel"></app-topic-card>
+      </div>
     </div>
   </div>
 </div>
+
