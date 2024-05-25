@@ -1,7 +1,9 @@
 package com.openclassrooms.mddapi.mapper;
 
-import com.openclassrooms.mddapi.dto.*;
-import com.openclassrooms.mddapi.model.Author;
+import com.openclassrooms.mddapi.dto.CommentDto;
+import com.openclassrooms.mddapi.dto.PostDto;
+import com.openclassrooms.mddapi.dto.SimplePostDto;
+import com.openclassrooms.mddapi.dto.TopicDto;
 import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.Post;
 import com.openclassrooms.mddapi.model.Topic;
@@ -23,11 +25,6 @@ public interface PostMapper {
     */
     List<CommentDto> commentsToCommentDtos(List<Comment> comments);
     CommentDto commentToCommentDto(Comment comment);
-    /*
-    Author Mappers
-     */
-    SimpleUserDto authorToSimpleUserDto(Author author);
-    Author simpleUserDtoToAuthor(SimpleUserDto simpleUserDto);
     /*
     Topic Mapper
      */

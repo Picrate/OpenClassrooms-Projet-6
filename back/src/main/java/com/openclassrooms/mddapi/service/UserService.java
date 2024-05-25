@@ -50,7 +50,7 @@ public class UserService {
     public SimpleUserDto getSimpleUserDtoByEmailOrUsername(String login) {
         Optional<User> user = userRepository.findByEmailOrUsername(login, login);
         if (user.isPresent()) {
-            return userMapper.userToSimpleUser(user.get());
+            return userMapper.userToSimpleDto(user.get());
         } else {
             return null;
         }
@@ -81,6 +81,18 @@ public class UserService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public List<String> getUserRoles(String login){
+        List<String> roles = new ArrayList<String>();
+        Optional<User> opt = this.userRepository.findByEmailOrUsername(login, login);
+        if (opt.isPresent()) {
+            User user = opt.get();
+            for (Role role : user.getRoles()) {
+                roles.add(role.getName().name());
+            }
+        }
+        return roles;
     }
 
     public Boolean updateTopics(TopicDto topicDto, String login) {

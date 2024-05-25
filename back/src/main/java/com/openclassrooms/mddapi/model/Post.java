@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.model;
 
 
+import com.openclassrooms.mddapi.dto.SimpleUserDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -22,7 +23,7 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private Author author;
+    private SimpleUserDto author;
     private Topic topic;
     private List<Comment> comments;
     @Field("created_at")

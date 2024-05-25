@@ -11,9 +11,11 @@ public interface UserMapper {
 
     UserDto userToDto(User user);
     User userDtoToUser(UserDto userDto);
-    SimpleUserDto userToSimpleUser(User user);
+
+    SimpleUserDto userToSimpleDto(User user);
+    User simpleUserDtoToUser(SimpleUserDto simpleUserDto);
+
     User updatedUserDtoToUser(UpdatedUserDto updatedUserDto);
     UpdatedUserDto userToUpdatedUserDto(User user);
-    SimpleUserDto userToSimpleUserDto(User user);
 
 }

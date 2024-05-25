@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.security.jwt;
 
+import com.openclassrooms.mddapi.dto.SimpleUserDto;
 import com.openclassrooms.mddapi.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -28,32 +29,50 @@ public class JwtUtils {
     @Value("${oc.app.jwtCookieName}")
     private String jwtCookie;
 
+    @Value("${oc.app.jwtRefreshCookieName}")
+    private String jwtRefreshCookie;
+
+    private String generateJwtToken(UserDetailsImpl userDetails) {
+        return generateTokenFromUsername(userDetails.getUsername());
+    }
+
+    private String generateJwtRefreshToken(UserDetailsImpl userDetails) {
+        return generateTokenFromUsername(userDetails.getUsername());
+    }
+
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getEmail());
-        return ResponseCookie
-                .from(jwtCookie, jwt)
-                .path("/api").maxAge(24*60*60)
-                .httpOnly(true)
-                .build();
+        return generateCookie(jwtCookie, jwt, "/api");
+    }
+
+    public ResponseCookie generateJwtCookie(SimpleUserDto user) {
+        String jwt = generateTokenFromUsername(user.getUsername());
+        return generateCookie(jwtCookie, jwt, "/api");
+    }
+
+    public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
+        return generateCookie(jwtRefreshCookie, refreshToken, "/api/auth/refreshtoken");
+    }
+
+    public String getJwtFromCookies(HttpServletRequest request) {
+       return getCookieValueByName(request, jwtCookie);
+    }
+
+    public  String getJwtRefreshFromCookies(HttpServletRequest request) {
+        return getCookieValueByName(request, jwtRefreshCookie);
     }
 
     public ResponseCookie getCleanJwtCookie(){
         return ResponseCookie.from(jwtCookie, null).path("/api").build();
     }
 
+    public ResponseCookie getCleanJwtRefreshCookie(){
+        return ResponseCookie.from(jwtRefreshCookie, null).path("/api/auth/refreshtoken").build();
+    }
+
     // jwtSecret must be 32 bytes long and encoded in BASE64
     private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
-    }
-
-    public String generateTokenFromUsername(String username){
-        return Jwts.builder()
-                .issuer("Orion")
-                .subject(username)
-                .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
-                .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
@@ -77,11 +96,30 @@ public class JwtUtils {
         return false;
     }
 
-    public String getJwtFromCookies(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+    public String generateTokenFromUsername(String username){
+        return Jwts.builder()
+                .issuer("Orion")
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    private ResponseCookie generateCookie(String cookieName, String cookieValue, String path) {
+        return ResponseCookie
+                .from(cookieName, cookieValue)
+                .path(path)
+                .maxAge(24*60*60) // 24H
+                .httpOnly(true)
+                .build();
+    }
+
+    private String getCookieValueByName(HttpServletRequest request, String cookieName) {
+        Cookie cookie = WebUtils.getCookie(request, cookieName);
         if (cookie != null) {
             return cookie.getValue();
-        }  else {
+        }else {
             return null;
         }
     }

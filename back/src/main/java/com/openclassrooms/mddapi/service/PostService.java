@@ -59,7 +59,7 @@ public class PostService {
         Optional<Post> post = postRepository.findById(postId);
         if(post.isPresent()) {
             Post postObj = post.get();
-            Comment comment = new Comment(postMapper.simpleUserDtoToAuthor(user), postCommentDto.getComment());
+            Comment comment = new Comment(user, postCommentDto.getComment());
             postObj.addComment(comment);
             postRepository.save(postObj);
             return postObj.getId();
@@ -70,7 +70,7 @@ public class PostService {
 
     public String createNewPost(SimplePostDto postDto, SimpleUserDto author) {
         Post newPost = postMapper.simplePostDtoToPost(postDto);
-        newPost.setAuthor(postMapper.simpleUserDtoToAuthor(author));
+        newPost.setAuthor(author);
         this.postRepository.save(newPost);
         return newPost.getId();
     }
