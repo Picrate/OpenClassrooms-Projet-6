@@ -9,12 +9,14 @@ import com.openclassrooms.mddapi.model.Topic;
 import com.openclassrooms.mddapi.repository.PostRepository;
 import com.openclassrooms.mddapi.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +96,7 @@ public class PostService {
             }
             orCriteria.orOperator(topicsCriterias);
             Query query = new Query(orCriteria);
+            query.with(Sort.by(Sort.Order.desc("created_at")));
             return postMapper.postsToPostDtos(mongoTemplate.find(query, Post.class));
         }
     }
