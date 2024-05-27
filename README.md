@@ -4,7 +4,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/code-it-test-it-break-it.svg)](https://forthebadge.com)
 
 # MDD Plateform MVP version
-Yoga App is a Web Application for managing yoga sessions.
+MDD App is a Blog Web Application for Developpers.
 
 ## 🔥Features
 
