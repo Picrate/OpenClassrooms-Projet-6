@@ -38,7 +38,7 @@ export class PostFormComponent implements OnInit {
     const newPost: NewPostRequest = {
       title: this.postForm.value.title,
       content: this.postForm.value.content,
-      topic: this.topic
+      topic: this.topics[0]
     }
     this.postApiService.createNewPost(newPost).subscribe(response => {
       this.onMessage = true;

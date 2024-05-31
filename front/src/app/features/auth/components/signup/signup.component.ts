@@ -69,7 +69,6 @@ export class SignupComponent  implements OnInit{
 
   signup() {
     const signUpRequest: SignUpRequest = this.signUpForm.value as SignUpRequest;
-    console.log(signUpRequest);
     this.authService.register(signUpRequest).subscribe({
       next: value => {
         this.isRegistred = true;
