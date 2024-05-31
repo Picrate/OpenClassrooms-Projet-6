@@ -35,11 +35,10 @@ export class PostFormComponent implements OnInit {
   // TODO Traiter le retour
 
   onSubmit() {
-    const postTopic = this.topics.find((element)=> element.title === this.postForm.value.topic);
     const newPost: NewPostRequest = {
       title: this.postForm.value.title,
       content: this.postForm.value.content,
-      topic: postTopic
+      topic: this.topics[0]
     }
     console.log(newPost);
     this.postApiService.createNewPost(newPost).subscribe(response => {
