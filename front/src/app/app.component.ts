@@ -28,11 +28,9 @@ export class AppComponent implements OnInit{
     });
     if(this.storageService.hasRefreshTokenOnLocalStorage()){
       const refreshToken = this.storageService.getRefreshToken();
-      console.log(refreshToken);
       if(refreshToken.refreshToken !== null && refreshToken.refreshToken.length>0){
         this.authService.refreshToken(refreshToken).subscribe(response => {
           this.storageService.saveUser(response);
-            console.log(response);
             this.router.navigate(['/users/feed']);
         })
       }

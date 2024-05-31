@@ -37,14 +37,12 @@ export class UsersService {
   }
 
   public isUsernameOrEmailAlreadyExists(usernameOrEmail: string): Observable<ResponseMessage>{
-    console.log(usernameOrEmail);
     if(usernameOrEmail === null){
       return of({message: "false"});
     } else {
       let request = {
         usernameOrEmail : usernameOrEmail
       }
-      console.log(request);
       return this.httpClient.post<ResponseMessage>(`${this.pathService}/exists`, request);
     }
   }
